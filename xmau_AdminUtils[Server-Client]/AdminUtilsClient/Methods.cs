@@ -13,11 +13,11 @@ namespace AdminUtilsClient
     {
         public static Vector3 lastTpCoords = new Vector3(0.0F, 0.0F, 0.0F);
         static bool godmodeON = false;
-        int spectateCam;
+        static int spectateCam;
         bool handcuffed = false;
-        Vector3 pCCoords;
-        bool noclip = false;
-        float heading;
+        static Vector3 pCCoords;
+        static bool noclip = false;
+        static float heading;
         float speed = 1.28F;
         int playerPed;
 
@@ -313,7 +313,8 @@ namespace AdminUtilsClient
                 //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
                 noclip = true;
                 Noc();
-            } else
+            }
+            else
             {
                 API.FreezeEntityPosition(playerPed, false);
                 //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
