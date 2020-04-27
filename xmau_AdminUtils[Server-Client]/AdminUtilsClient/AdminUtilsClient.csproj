@@ -50,11 +50,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Menu.cs" />
-    <Compile Include="Methods.cs" />
-    <Compile Include="Commands.cs" />
+    <Compile Include="Boosters\CommandsBoosters.cs" />
+    <Compile Include="Boosters\MethodsBoosters.cs" />
+    <Compile Include="Help\CommandsHelp.cs" />
+    <Compile Include="Help\MethodsHelp.cs" />
+    <Compile Include="Notifications\CommandsNotifications.cs" />
+    <Compile Include="Notifications\MethodsNotifications.cs" />
+    <Compile Include="Peds\CommandsPeds.cs" />
+    <Compile Include="Peds\MethodsPeds.cs" />
+    <Compile Include="PlayerAdministration\CommandsPlayerAdministration.cs" />
+    <Compile Include="PlayerAdministration\MethodsPlayerAdministration.cs" />
+    <Compile Include="Spawners\CommandsSpawners.cs" />
+    <Compile Include="Spawners\MethodsSpawners.cs" />
+    <Compile Include="Teleports\CommandsTeleports.cs" />
+    <Compile Include="Teleports\MethodsTeleports.cs" />
+    <Compile Include="Usefull\AdminControl.cs" />
+    <Compile Include="Usefull\Dictionary.cs" />
+    <Compile Include="Menu\MenuAdmin.cs" />
+    <Compile Include="TestingBench\Methods.cs" />
+    <Compile Include="TestingBench\Commands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Usefull\Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,9 +20,29 @@ namespace AdminUtilsServer
             EventHandlers["vorp:broadCastMessage"] += new Action<Player, string>(BroadCastMessage);
             EventHandlers["vorp:slap"] += new Action<Player, int>(Slap); 
             EventHandlers["vorp:stopplayer"] += new Action<Player, int>(StopP);
+            EventHandlers["vorp:requestPlayerToSpectate1"] += new Action<Player,int>(Spectate1);
+            EventHandlers["vorp:requestPlayerToSpectate3"] += new Action<int, int>(Spectate3);
+
         }
 
-        
+        private void Spectate3(int sourceId, int destinyId)
+        {
+            PlayerList pl = new PlayerList();
+            Player p = pl[sourceId];
+            TriggerClientEvent(p, "vorp:requestPlayerToSpectate4", destinyId);
+        }
+
+        private void Spectate1([FromSource]Player player,int idDestinatary)
+        {
+            
+            PlayerList pl = new PlayerList();
+            Player p = pl[idDestinatary];
+            
+
+            TriggerClientEvent(p, "vorp:requestPlayerToSpectate2",player.Handle);
+        }
+
+
 
 
         /// <summary>
@@ -87,13 +107,13 @@ namespace AdminUtilsServer
         {
             PlayerList pl = new PlayerList();
             Player p = pl[id];
-            TriggerClientEvent(p,"redem_roleplay:Tip", message, 8000);
+            TriggerClientEvent(p,"vorp:Tip", message, 8000);
             //Exports["redem_roleplay"].DisplayTopCenterNotification(0, message, 8000);
         }
 
         private void BroadCastMessage([FromSource]Player player, string message)
         {
-            TriggerClientEvent("redem_roleplay:NotifyLeft", player.Name, message, "generic_textures", "tick", 12000);
+            TriggerClientEvent("vorp:NotifyLeft", player.Name, message, "generic_textures", "tick", 12000);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core;
+﻿using AdminUtilsClient.Teleports;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
@@ -60,12 +61,11 @@ namespace AdminUtilsClient
 
         public static void CreateBlip()
         {
-            blip = Function.Call<int>((Hash)0x554D9D53F696D002, 203020899, Methods.lastTpCoords.X, Methods.lastTpCoords.Y, Methods.lastTpCoords.Z);
+            blip = Function.Call<int>((Hash)0x554D9D53F696D002, 203020899, MethodsTeleports.lastTpCoords.X, MethodsTeleports.lastTpCoords.Y, MethodsTeleports.lastTpCoords.Z);
             Debug.WriteLine(blip.ToString());
             Function.Call((Hash)0x74F74D3207ED525C, blip, -1546805641, 1);
             Function.Call((Hash)0xD38744167B2FA257, blip, 0.2F);
             Function.Call((Hash)0x0A062D6D7C0B2C2C, blip, "LASTPOSITION");
         }
-
     }
 }
