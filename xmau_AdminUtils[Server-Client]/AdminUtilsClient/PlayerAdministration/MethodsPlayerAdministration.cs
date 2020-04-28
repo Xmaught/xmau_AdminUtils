@@ -10,9 +10,9 @@ namespace AdminUtilsClient.PlayerAdministration
 {
     class MethodsPlayerAdministration : BaseScript
     {
-        static int spectateCam;
+        //static int spectateCam;
         static bool handcuffed = false;
-        static Vector3 pCCoords;
+        //static Vector3 pCCoords;
         public MethodsPlayerAdministration()
         {
 

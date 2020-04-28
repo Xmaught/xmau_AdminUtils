@@ -11,6 +11,7 @@ namespace AdminUtilsClient.Teleports
     class MethodsTeleports : BaseScript
     {
         public static Vector3 lastTpCoords = new Vector3(0.0F, 0.0F, 0.0F);
+        static bool guarma = false;
 
         public MethodsTeleports()
         {
@@ -132,6 +133,28 @@ namespace AdminUtilsClient.Teleports
             API.RemoveBlip(ref Utils.blip);
             Utils.blip = -1;
             lastTpCoords = new Vector3(0.0F, 0.0F, 0.0F);
+        }
+
+        public void Guarma(List<object> args)
+        {
+
+            if (!guarma)
+            {
+                API.SetEntityCoords(API.PlayerPedId(), 1606.34F, -4096.1F, 89.68F,false,false,false,false);
+                Function.Call((Hash)0xA657EC9DBC6CC900, 1935063277);
+                Function.Call((Hash)0xE8770EE02AEE45C2, 1);
+                Function.Call((Hash)0x74E2261D2A66849A, true);
+                guarma = true;
+            }
+            else
+            {
+                API.SetEntityCoords(API.PlayerPedId(), 1606.34F, -4096.1F, 89.68F, false, false, false, false);
+                Function.Call((Hash)0xA657EC9DBC6CC900, -1868977180);
+                Function.Call((Hash)0xE8770EE02AEE45C2, 0);
+                Function.Call((Hash)0x74E2261D2A66849A, false);
+                guarma = false;
+            }
+            
         }
 
 

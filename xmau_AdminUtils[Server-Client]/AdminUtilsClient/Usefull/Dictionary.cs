@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,10 +9,6 @@ namespace AdminUtilsClient
 {
     class Dictionary
     {
-
-        public static List<string> objects = new List<string>
-        {
-        };
 
         public static List<string> horses = new List<string>
         {
@@ -1222,5 +1219,250 @@ namespace AdminUtilsClient
                 "U_M_Y_HtlWorker_02",
                 "U_M_Y_ShackStarvingKid_01"
             };
+
+        public static List<string> weapons = new List<string>
+        {
+            "WEAPON_KIT_CAMERA",
+            "WEAPON_MOONSHINEJUG",
+            "WEAPON_MELEE_LANTERN_ELECTRIC",
+            "WEAPON_MELEE_TORCH ",
+            "WEAPON_MELEE_BROKEN_SWORD",
+            "WEAPON_FISHINGROD",
+            "WEAPON_MELEE_HATCHET",
+            "WEAPON_MELEE_CLEAVER",
+            "WEAPON_MELEE_ANCIENT_HATCHET",
+            "WEAPON_MELEE_HATCHET_VIKING",
+            "WEAPON_MELEE_HATCHET_HEWING",
+            "WEAPON_MELEE_HATCHET_DOUBLE_BIT",
+            "WEAPON_MELEE_HATCHET_DOUBLE_BIT_RUSTED",
+            "WEAPON_MELEE_HATCHET_HUNTER",
+            "WEAPON_MELEE_HATCHET_HUNTER_RUSTED",
+            "WEAPON_MELEE_KNIFE_JOHN",
+            "WEAPON_MELEE_KNIFE",
+            "WEAPON_MELEE_KNIFE_JAWBONE",
+            "WEAPON_THROWN_THROWING_KNIVES",
+            "WEAPON_MELEE_KNIFE_MINER",
+            "WEAPON_MELEE_KNIFE_CIVIL_WAR",
+            "WEAPON_MELEE_KNIFE_BEAR",
+            "WEAPON_MELEE_KNIFE_VAMPIRE",
+            "WEAPON_LASSO",
+            "WEAPON_MELEE_MACHETE",
+            "WEAPON_THROWN_TOMAHAWK",
+            "WEAPON_THROWN_TOMAHAWK_ANCIENT",
+            "WEAPON_PISTOL_M1899AMMO_PISTOL",
+            "WEAPON_PISTOL_MAUSER",
+            "WEAPON_PISTOL_MAUSER_DRUNK",
+            "WEAPON_PISTOL_SEMIAUTO",
+            "WEAPON_PISTOL_VOLCANIC",
+            "WEAPON_REPEATER_CARBINE",
+            "WEAPON_REPEATER_EVANS",
+            "WEAPON_REPEATER_HENRY",
+            "WEAPON_RIFLE_VARMINT",
+            "WEAPON_REPEATER_WINCHESTER",
+            "WEAPON_REVOLVER_CATTLEMAN",
+            "WEAPON_REVOLVER_CATTLEMAN_JOHN",
+            "WEAPON_REVOLVER_CATTLEMAN_MEXICAN",
+            "WEAPON_REVOLVER_CATTLEMAN_PIG",
+            "WEAPON_REVOLVER_DOUBLEACTION",
+            "WEAPON_REVOLVER_DOUBLEACTION_EXOTIC",
+            "WEAPON_REVOLVER_DOUBLEACTION_GAMBLER",
+            "WEAPON_REVOLVER_DOUBLEACTION_MICAH",
+            "WEAPON_REVOLVER_LEMAT",
+            "WEAPON_REVOLVER_SCHOFIELD",
+            "WEAPON_REVOLVER_SCHOFIELD_GOLDEN",
+            "WEAPON_REVOLVER_SCHOFIELD_CALLOWAY",
+            "WEAPON_RIFLE_BOLTACTION",
+            "WEAPON_SNIPERRIFLE_CARCANO",
+            "WEAPON_SNIPERRIFLE_ROLLINGBLOCK",
+            "WEAPON_SNIPERRIFLE_ROLLINGBLOCK_EXOTIC",
+            "WEAPON_RIFLE_SPRINGFIELD",
+            "WEAPON_SHOTGUN_DOUBLEBARREL",
+            "WEAPON_SHOTGUN_DOUBLEBARREL_EXOTIC",
+            "WEAPON_SHOTGUN_PUMP",
+            "WEAPON_SHOTGUN_REPEATING",
+            "WEAPON_SHOTGUN_SAWEDOFF",
+            "WEAPON_SHOTGUN_SEMIAUTO",
+            "WEAPON_BOW",
+            "WEAPON_THROWN_DYNAMITE",
+            "WEAPON_THROWN_MOLOTOV "
+        };
+
+        public static List<string> ammoType = new List<string>
+        {
+            "BOW",
+            "DYNAMITE",
+            "MOLOTOV",
+            "PISTOL",
+            "REPEATER",
+            "REVOLVER",
+            "RIFLE",
+            "SHOTGUN",
+            "KNIVES",
+            "TOMAHAWK"
+        };
+
+        public static Dictionary<string, List<string>> ammo = new Dictionary<string, List<string>>
+        {
+            {"BOW", new List<string>()
+                {
+                    "AMMO_ARROW",
+                    "AMMO_ARROW_DYNAMITE",
+                    "AMMO_ARROW_FIRE",
+                    "AMMO_ARROW_POISON",
+                    "AMMO_ARROW_IMPROVED",
+                    "AMMO_ARROW_SMALL_GAME"
+                }
+            },
+            {"DYNAMITE", new List<string>()
+                {
+                    "AMMO_DYNAMITE",
+                    "AMMO_DYNAMITE_VOLATILE"
+                }
+            },
+            {"MOLOTOV", new List<string>()
+                {
+                    "AMMO_MOLOTOV",
+                    "AMMO_MOLOTOV_VOLATILE"
+                }
+            },
+            {"PISTOL", new List<string>()
+                {
+                    "AMMO_PISTOL",
+                    "AMMO_PISTOL_EXPRESS",
+                    "AMMO_PISTOL_EXPRESS_EXPLOSIVE",
+                    "AMMO_PISTOL_HIGH_VELOCITY",
+                    "AMMO_PISTOL_SPLIT_POINT"
+                }
+            },
+            {"REPEATER", new List<string>()
+                {
+                    "AMMO_REPEATER",
+                    "AMMO_REPEATER_EXPRESS",
+                    "AMMO_REPEATER_EXPRESS_EXPLOSIVE",
+                    "AMMO_REPEATER_HIGH_VELOCITY"
+                }
+            },
+            {"REVOLVER", new List<string>()
+                {
+                    "AMMO_REVOLVER",
+                    "AMMO_REVOLVER_EXPRESS",
+                    "AMMO_REVOLVER_EXPRESS_EXPLOSIVE",
+                    "AMMO_REVOLVER_HIGH_VELOCITY",
+                    "AMMO_REVOLVER_SPLIT_POINT"
+                }
+            },
+            {"RIFLE", new List<string>()
+                {
+                    "AMMO_RIFLE",
+                    "AMMO_RIFLE_EXPRESS",
+                    "AMMO_RIFLE_EXPRESS_EXPLOSIVE",
+                    "AMMO_RIFLE_HIGH_VELOCITY",
+                    "AMMO_RIFLE_SPLIT_POINT",
+                    "AMMO_RIFLE_VARMINT"
+                }
+            },
+             {"SHOTGUN", new List<string>()
+                {
+                    "AMMO_SHOTGUN",
+                    "AMMO_SHOTGUN_BUCKSHOT_INCENDIARY",
+                    "AMMO_SHOTGUN_SLUG",
+                    "AMMO_SHOTGUN_EXPRESS_EXPLOSIVE"
+                }
+            },
+            {"KNIVES", new List<string>()
+                {
+                    "AMMO_THROWING_KNIVES",
+                    "AMMO_THROWING_KNIVES_IMPROVED",
+                    "AMMO_THROWING_KNIVES_POISON"
+                }
+            },
+            {"TOMAHAWK", new List<string>()
+                {
+                    "AMMO_TOMAHAWK",
+                    "AMMO_TOMAHAWK_HOMING",
+                    "AMMO_TOMAHAWK_IMPROVED"
+                }
+            }
+        };
+
+        public static List<string> objects = new List<string>
+        {
+            "p_bag01x",
+            "p_glass001x",
+            "s_hotbox01x",
+            "p_crate03x",
+            "p_powderhorn01x",
+            "p_cookgrate01x",
+            "p_bedrollclosed01x",
+            "s_rock01x",
+            "p_matches01x",
+            "p_clipboard03x",
+            "p_pitchfork01x",
+            "p_sledgehammer01x",
+            "p_glass01x",
+            "cs_mp_went",
+            "p_cardssplit01x",
+            "p_cs_bullwhip01x",
+            "p_chickenfence01x",
+            "s_trainplanrolled01x",
+            "p_cs_cratetnt02x",
+            "p_teatray01",
+            "p_cs_wantedalive01x",
+            "s_ropehogtielegsmedium01x",
+            "p_sidetable07x",
+            "p_cs_arthurhat01x",
+            "p_ambtentplaid01x",
+            "p_broom02x",
+            "p_cs_flyinggoggle01x",
+            "p_gen_documentfolder01x",
+            "p_cs_newspaper_01x",
+            "p_cs_carrotstewsmall01x",
+            "p_cs_catfish_whole01x",
+            "p_bla_lumbdesk",
+            "s_corpsepit01x",
+            "p_cs_sackcorn01x",
+            "s_shell_45mm",
+            "p_cigarbox02x",
+            "p_awningbills01x",
+            "s_inv_cigcard01x",
+            "p_sharpeningstone01x",
+            "p_cs_meatstew01x",
+            "p_cs_catalogue01x",
+            "p_sis_frontgateb_l",
+            "s_rcboat01x",
+            "p_package13x",
+            "p_barrel04x",
+            "p_bamboostick01x",
+            "p_chairfolding02x",
+            "p_cs_shackleleg01x",
+            "p_bottlejd01x"
+        };
+
+        public static Dictionary<string, uint> weather = new Dictionary<string, uint>
+        {
+            {"Blizzard",0x27EA2814},
+            {"Clouds",0x30FDAF5C},
+            {"Drizzle",0x995C7F44},
+            {"Fog",0xD61BDE01},
+            {"GroundBlizzard",0x7F622122},
+            {"Hail",0x75A9E268},
+            {"HighPressure",0xF5A87B65},
+            {"Hurricane",0x320D0951},
+            {"Misty",0x5974E8E5},
+            {"Overcast",0xBB898D2D},
+            {"OvercastDark",0x19D4F1D9},
+            {"Rain",0x54A69840},
+            {"Sandstorm",0xB17F6111},
+            {"Shower",0xE72679D5},
+            {"Sleet",0xCA71D7C},
+            {"Snow",0xEFB6EFF6},
+            {"SnowClearing",0x641DFC11},
+            {"SnowLight",0x23FB812B},
+            {"Sunny",0x614A1F91},
+            {"Thunder",0xB677829F},
+            {"Thunderstorm",0x7C1C4A13},
+            {"WhiteOut",0x2B402288}
+        };
+
     }
 }

@@ -12,11 +12,19 @@ namespace AdminUtilsClient.Boosters
     {
         static float heading;
         public static bool godmodeON = false;
-        static bool noclip = false;
+        public static bool noclip = false;
         float speed = 1.28F;
+
+        public static bool thorON = false;
+        public static bool ghostRiderON = false;
+        static int entity;
+        static int pedCreated = 0;
         public MethodsBoosters()
         {
             Tick += Noc;
+            Tick += OnClick;
+            Tick += OnLight;
+            Tick += OnFire;
         }
 
         public void Golden(List<object> args)
@@ -182,6 +190,141 @@ namespace AdminUtilsClient.Boosters
                 }
 
             }
+        }
+
+        public async void GhostRider(List<object> args)
+        {
+            if (ghostRiderON)
+            {
+                API.RemoveParticleFxFromEntity(entity);
+                API.RemoveParticleFxFromEntity(pedCreated);
+                API.StartEntityFire(entity, 0, 0, 1000);
+
+                ghostRiderON = false;
+            }
+            else
+            {
+                if (API.GetEntityAttachedTo(entity) == 0)
+                {
+                    int HashPed = API.GetHashKey("A_C_Horse_Arabian_Black");
+                    Vector3 coords = API.GetEntityCoords(API.PlayerPedId(), true, true);
+                    await Utils.LoadModel(HashPed);
+                    pedCreated = API.CreatePed((uint)HashPed, coords.X + 1, coords.Y, coords.Z, 0, true, true, true, true);
+
+
+                    //Spawn
+                    Function.Call((Hash)0x283978A15512B2FE, pedCreated, true);
+                    //SetPedIntoVehicle
+                    Function.Call((Hash)0x028F76B6E78246EB, API.PlayerPedId(), pedCreated, -1, false);
+
+                    API.SetEntityInvincible(pedCreated, true);
+                }
+                else
+                {
+                    API.SetEntityInvincible(API.GetEntityAttachedTo(entity), true);
+                }
+                ghostRiderON = true;
+
+
+            }
+        }
+
+        public async Task OnFire()
+        {
+            await Delay(500);
+            if (ghostRiderON)
+            {
+                entity = API.PlayerPedId();
+                API.StartEntityFire(entity, 0, 0, 0);
+
+                API.SetEntityHealth(entity, API.GetEntityMaxHealth(entity, 0), 0);
+                Vector3 horseCoords = API.GetEntityCoords(pedCreated, true, true);
+
+                API.RequestNamedPtfxAsset((uint)API.GetHashKey("core"));
+                API.UseParticleFxAsset("core");
+                int ptfxh = API.StartParticleFxLoopedOnEntity("ent_amb_generic_fire_field", pedCreated, 0.4F, 0.4F, -1F, 0.0F, 0.0F, 0.0F, 2.5F, false, true, false);
+            }
+        }
+
+
+
+
+        [Tick]
+        public async Task OnLight()
+        {
+            int entity = 0;
+            bool hit = false;
+            Vector3 endCoord = new Vector3();
+            Vector3 surfaceNormal = new Vector3();
+            Vector3 camCoords = API.GetGameplayCamCoord();
+            Vector3 sourceCoords = GetCoordsFromCam(1000.0F);
+            int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
+            API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
+            if (thorON)
+            {
+                //API.DrawLightWithRange(endCoord.X, endCoord.Y, endCoord.Z, 255, 255, 255, 2.0F, 200000000.0F);
+                Function.Call((Hash)0x2A32FAA57B937173, -1795314153, endCoord.X, endCoord.Y, endCoord.Z, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 50.0F, 255, 255, 0, 155, false, false, 2, false, 0, 0, false);
+            }
+        }
+
+
+        [Tick]
+        public async Task OnClick()
+        {
+            await Delay(0);
+            int entity = 0;
+            bool hit = false;
+            Vector3 endCoord = new Vector3();
+            Vector3 surfaceNormal = new Vector3();
+            Vector3 camCoords = API.GetGameplayCamCoord();
+            Vector3 sourceCoords = GetCoordsFromCam(1000.0F);
+            int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
+            API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
+
+
+
+            if (API.IsControlJustPressed(0, 0xCEE12B50) && thorON)
+            {
+
+                API.ForceLightningFlashAtCoords(endCoord.X, endCoord.Y, endCoord.Z);
+            }
+        }
+
+
+
+
+        public void Thor(List<object> args)
+        {
+            if (thorON)
+            {
+                thorON = false;
+            }
+            else
+            {
+                thorON = true;
+            }
+            //API.GetShapeTestResult();
+            //API.StartEntityFire
+        }
+
+        public Vector3 GetCoordsFromCam(float distance)
+        {
+            Vector3 rot = API.GetGameplayCamRot(2);
+            Vector3 coord = API.GetGameplayCamCoord();
+
+            float tZ = rot.Z * 0.0174532924F;
+            float tX = rot.X * 0.0174532924F;
+
+
+
+
+            float num = (float)Math.Abs(Math.Cos(tX));
+
+            float newCoordX = coord.X + (float)(-Math.Sin(tZ)) * (num + distance);
+            float newCoordY = coord.Y + (float)(Math.Cos(tZ)) * (num + distance);
+            float newCoordZ = coord.Z + (float)(Math.Sin(tX)) * (num + distance);
+
+            return new Vector3(newCoordX, newCoordY, newCoordZ);
         }
     }
 }

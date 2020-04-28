@@ -26,6 +26,7 @@ namespace AdminUtilsClient
         static MethodsPeds methPeds;
         static MethodsNotifications methNotifications;
         static MethodsPlayerAdministration methodsPlayerAdministration;
+        static Methods meth;
 
         public static void executeAdminCommand(string command, List<object> args, string cl)
         {
@@ -77,6 +78,13 @@ namespace AdminUtilsClient
                 MethodInfo mi = type.GetMethod(command);
                 methodsPlayerAdministration = new MethodsPlayerAdministration();
                 mi.Invoke(methodsPlayerAdministration, new Object[] { args });
+            }
+            else if (cl == "Methods")
+            {
+                type = typeof(Methods);
+                MethodInfo mi = type.GetMethod(command);
+                meth = new Methods();
+                mi.Invoke(meth, new Object[] { args });
             }
         }
     }

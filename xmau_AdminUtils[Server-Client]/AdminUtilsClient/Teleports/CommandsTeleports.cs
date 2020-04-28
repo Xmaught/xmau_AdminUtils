@@ -50,6 +50,11 @@ namespace AdminUtilsClient.Teleports
             {
                 AdminControl.executeAdminCommand("DelBack", args, "MethodsTeleports");
             }), false);
+
+            API.RegisterCommand("guarma", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("Guarma", args, "MethodsTeleports");
+            }), false);
         }
     }
 }

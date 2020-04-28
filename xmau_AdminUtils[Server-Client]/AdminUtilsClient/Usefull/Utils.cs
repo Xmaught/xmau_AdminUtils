@@ -65,7 +65,7 @@ namespace AdminUtilsClient
             Debug.WriteLine(blip.ToString());
             Function.Call((Hash)0x74F74D3207ED525C, blip, -1546805641, 1);
             Function.Call((Hash)0xD38744167B2FA257, blip, 0.2F);
-            Function.Call((Hash)0x0A062D6D7C0B2C2C, blip, "LASTPOSITION");
+            Function.Call((Hash)0x9CB1A1623062F402, blip, "LastPosition");
         }
     }
 }

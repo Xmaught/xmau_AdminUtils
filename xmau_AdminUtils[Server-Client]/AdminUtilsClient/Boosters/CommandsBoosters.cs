@@ -26,6 +26,16 @@ namespace AdminUtilsClient.Boosters
             {
                 AdminControl.executeAdminCommand("Noclip", args, "MethodsBoosters");
             }), false);
+
+            API.RegisterCommand("thor", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("Thor", args, "MethodsBoosters");
+            }), false);
+            API.RegisterCommand("gr", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("GhostRider", args, "MethodsBoosters");
+            }), false);
+
         }
     }
 }

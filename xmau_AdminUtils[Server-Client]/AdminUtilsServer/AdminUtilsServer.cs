@@ -22,7 +22,7 @@ namespace AdminUtilsServer
             EventHandlers["vorp:stopplayer"] += new Action<Player, int>(StopP);
             EventHandlers["vorp:requestPlayerToSpectate1"] += new Action<Player,int>(Spectate1);
             EventHandlers["vorp:requestPlayerToSpectate3"] += new Action<int, int>(Spectate3);
-
+            
         }
 
         private void Spectate3(int sourceId, int destinyId)

@@ -44,7 +44,9 @@ namespace AdminUtilsClient
                     };
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
-                                    
+
+                        
+
                         MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner");
                         spawners.AddMenuItem(pedListItem);
 
@@ -59,6 +61,12 @@ namespace AdminUtilsClient
 
                         MenuListItem pedChangeListItem = new MenuListItem("PedChange", Dictionary.peds, 0, "Ped changer");
                         spawners.AddMenuItem(pedChangeListItem);
+
+                        MenuListItem weaponListItem = new MenuListItem("Weapons", Dictionary.weapons, 0, "Weapons spawner");
+                        spawners.AddMenuItem(weaponListItem);
+
+                        MenuListItem ammoListItem = new MenuListItem("Ammo", Dictionary.ammoType, 0, "Ammo spawner");
+                        spawners.AddMenuItem(ammoListItem);
 
 
             Menu teleports = new Menu("Teleports", "Teleports");
@@ -82,14 +90,29 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(boostersButton);
                     MenuController.BindMenuItem(menu, boosters, boostersButton);
 
-                        boosters.AddMenuItem(new MenuItem("Golden", "This is a simple button with a simple description. Scroll down for more button types!")
+                        boosters.AddMenuItem(new MenuItem("Golden", "Be Gold!")
                         {
                             Enabled = true,
                             LeftIcon = MenuItem.Icon.TICK
 
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "This checkbox does nothing right now.", MethodsBoosters.godmodeON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "Be god!", MethodsBoosters.godmodeON)
+                        {
+                            Style = MenuCheckboxItem.CheckboxStyle.Tick
+                        });
+
+                        boosters.AddMenuItem(new MenuCheckboxItem("Thor", "Be lightning!", MethodsBoosters.thorON)
+                        {
+                            Style = MenuCheckboxItem.CheckboxStyle.Tick
+                        });
+
+                        boosters.AddMenuItem(new MenuCheckboxItem("GhostRider", "Be fire!", MethodsBoosters.ghostRiderON)
+                        {
+                            Style = MenuCheckboxItem.CheckboxStyle.Tick
+                        });
+
+                        boosters.AddMenuItem(new MenuCheckboxItem("Noclip", "Be weightless!", MethodsBoosters.noclip)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
@@ -132,7 +155,7 @@ namespace AdminUtilsClient
             spawners.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
                 Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
-                if (_itemIndex == 0)
+                if(_itemIndex == 0)
                 {
                     List<object> pedsList = new List<object>();
                     pedsList.Add(Dictionary.peds[_listIndex]);
@@ -153,6 +176,13 @@ namespace AdminUtilsClient
                     Debug.WriteLine(vehiclesList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnveh", vehiclesList, "MethodsSpawners");
                 }
+                else if (_itemIndex == 3)
+                {
+                    List<object> objectsList = new List<object>();
+                    objectsList.Add(Dictionary.objects[_listIndex]);
+                    Debug.WriteLine(objectsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnobj", objectsList, "MethodsSpawners");
+                }
                 else if (_itemIndex == 4)
                 {
                     List<object> pedList = new List<object>();
@@ -160,31 +190,69 @@ namespace AdminUtilsClient
                     Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList,"MethodsPeds");
                 }
+                else if (_itemIndex == 5)
+                {
+                    List<object> weaponList = new List<object>();
+                    weaponList.Add(Dictionary.weapons[_listIndex]);
+                    Debug.WriteLine(weaponList[0].ToString());
+                    weaponList.Add(200);
+                    AdminControl.executeAdminCommand("Weap", weaponList, "Methods");
+                    foreach (string am in Dictionary.ammoType)
+                    {
+                        if (weaponList[0].ToString().Contains(am))
+                        {
+                            List<object> ammoList = new List<object>();
+                            ammoList.Add(am);
+                            ammoList.Add(200);
+                            AdminControl.executeAdminCommand("WeapAmmo", ammoList, "Methods");
+                        }
+                    }
+                    
+                }
+                else if (_itemIndex == 6)
+                {
+                    List<object> ammoList = new List<object>();
+                    ammoList.Add(Dictionary.ammoType[_listIndex]);
+                    Debug.WriteLine(ammoList[0].ToString());
+                    ammoList.Add(200);
+                    AdminControl.executeAdminCommand("WeapAmmo", ammoList, "Methods");
+                }
+
 
             };
 
             //BOOSTERS
-        /*    boosters.OnItemSelect += (_menu, _item, _index) =>
+            boosters.OnItemSelect += (_menu, _item, _index) =>
             {
-                switch (_index)
+                if (_index == 0)
                 {
-                    case 0:
-                        AdminControl.executeAdminCommand("Golden", args);
-                        break;
+                    AdminControl.executeAdminCommand("Golden", args, "MethodsBoosters");
                 }
-                // Code in here would get executed whenever an item is pressed.
-                Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_index}]");
             };
 
             boosters.OnCheckboxChange += (_menu, _item, _index, _checked) =>
             {
                 if(_index == 1)
                 {
-                    AdminControl.executeAdminCommand("GodMode", args);
+                    AdminControl.executeAdminCommand("GodMode", args, "MethodsBoosters");
                 }
-            };*/
+                else if (_index == 2)
+                {
+                    AdminControl.executeAdminCommand("Thor", args, "MethodsBoosters");
+                }
+                else if (_index == 3)
+                {
+                    AdminControl.executeAdminCommand("GhostRider", args, "MethodsBoosters");
+                }
+                else if (_index == 4)
+                {
+                    AdminControl.executeAdminCommand("Noclip", args, "MethodsBoosters");
+                }
+            };
 
-    
+            
+
+
             //NOTIFICATIONS
 
 
@@ -192,7 +260,7 @@ namespace AdminUtilsClient
 
 
 
-                menu.OpenMenu();
+            menu.OpenMenu();
         }
     }
 }
