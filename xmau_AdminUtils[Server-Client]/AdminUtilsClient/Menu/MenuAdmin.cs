@@ -21,16 +21,15 @@ namespace AdminUtilsClient
         [Tick]
         private async Task OpenMenu()
         {
-            if(API.IsControlJustPressed(0, 0x446258B6))
+            if (API.IsControlJustPressed(0, 0x446258B6))
             {
-                AdminUtilsMenu();
-                await Delay(500);
+                await AdminUtilsMenu();
             }
-            await Delay(0);
         }
 
-        public void AdminUtilsMenu()
+        public async Task AdminUtilsMenu()
         {
+            await Delay(0);
             Menu menu = new Menu("AdminUtils", "Administration Menu");
             MenuController.AddMenu(menu);
 
@@ -44,8 +43,6 @@ namespace AdminUtilsClient
                     };
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
-
-                        
 
                         MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner");
                         spawners.AddMenuItem(pedListItem);
@@ -146,11 +143,7 @@ namespace AdminUtilsClient
 
                         });
 
-
-
-            //buttons/methods
-
-            //SPAWNERS
+            menu.OpenMenu();
 
             spawners.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
@@ -217,11 +210,8 @@ namespace AdminUtilsClient
                     ammoList.Add(200);
                     AdminControl.executeAdminCommand("WeapAmmo", ammoList, "Methods");
                 }
-
-
             };
 
-            //BOOSTERS
             boosters.OnItemSelect += (_menu, _item, _index) =>
             {
                 if (_index == 0)
@@ -249,18 +239,6 @@ namespace AdminUtilsClient
                     AdminControl.executeAdminCommand("Noclip", args, "MethodsBoosters");
                 }
             };
-
-            
-
-
-            //NOTIFICATIONS
-
-
-
-
-
-
-            menu.OpenMenu();
         }
     }
 }

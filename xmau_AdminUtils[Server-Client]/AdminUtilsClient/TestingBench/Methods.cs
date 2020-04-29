@@ -23,7 +23,7 @@ namespace AdminUtilsClient
         }
 
         
-        public async Task Weap(List<object> args)
+        public void Weap(List<object> args)
         {
             int playerPed = API.PlayerPedId();
             int HashModel = API.GetHashKey(args[0].ToString());
@@ -33,7 +33,7 @@ namespace AdminUtilsClient
             API.SetPedAmmo(playerPed, (uint)HashModel, ammoQuantity);
         }
 
-        public async Task WeapAmmo(List<object> args)
+        public void WeapAmmo(List<object> args)
         {
             int playerPed = API.PlayerPedId();
             string ammo = args[0].ToString();
