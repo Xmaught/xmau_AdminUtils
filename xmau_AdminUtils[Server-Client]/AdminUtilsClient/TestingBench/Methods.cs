@@ -14,36 +14,34 @@ namespace AdminUtilsClient
         static uint weatherType1;
         static uint weatherType2;
         static float percentWeather2;
+        
 
         public Methods()
         {
             
 
+        }
 
+
+
+        //API.TaskPlayAnim(API.PlayerPedId(), API.GetHashKey("amb_work@world_human_stand_fishing@male_b@base"), API.GetHashKey("base_fishingpole"), 8, -8, 10000, 0, 0, 1, 0, 0, 0, 0);
+
+        public void Scenario(List<object> args)
+        {
+            Function.Call((Hash)0x524B54361229154F,API.PlayerPedId(), API.GetHashKey("PROP_HUMAN_SEAT_CHAIR_FISHING_ROD"), 7000, true, 0, 0, false);
+            
+        }
+
+        //prueba manos arriba
+        public void HandUp(List<object> args)
+        {
+            //API.TaskHandsUp(API.PlayerPedId(),5000, API.PlayerPedId(),0,false);
+            API.SetSwimMultiplierForPlayer(API.PlayerPedId(), 1000000.0F);
+            int outEntity = API.PlayerPedId();
+            int playerPed= API.FindFirstPed(ref outEntity);
         }
 
         
-        public void Weap(List<object> args)
-        {
-            int playerPed = API.PlayerPedId();
-            int HashModel = API.GetHashKey(args[0].ToString());
-            int ammoQuantity = int.Parse(args[1].ToString());
-             
-            API.GiveDelayedWeaponToPed(playerPed, (uint)HashModel, ammoQuantity, true, 2);
-            API.SetPedAmmo(playerPed, (uint)HashModel, ammoQuantity);
-        }
-
-        public void WeapAmmo(List<object> args)
-        {
-            int playerPed = API.PlayerPedId();
-            string ammo = args[0].ToString();
-            int ammoQuantity = int.Parse(args[1].ToString());
-            foreach(string am in Dictionary.ammo[ammo])
-            {
-                int ammoType = API.GetHashKey(am);
-                API.SetPedAmmoByType(playerPed, ammoType, ammoQuantity);
-            }
-        }
 
         public void Weather(List<object> args)
         {

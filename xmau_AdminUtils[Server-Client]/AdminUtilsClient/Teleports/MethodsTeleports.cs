@@ -12,13 +12,20 @@ namespace AdminUtilsClient.Teleports
     {
         public static Vector3 lastTpCoords = new Vector3(0.0F, 0.0F, 0.0F);
         static bool guarma = false;
+        public static bool tpView;
 
         public MethodsTeleports()
         {
             EventHandlers["vorp:sendCoordsToDestinyBring"] += new Action<Vector3>(Bring);
             EventHandlers["vorp:askForCoords"] += new Action<string>(ResponseCoords);
             EventHandlers["vorp:coordsToStart"] += new Action<Vector3>(TpToPlayerDone);
+            EventHandlers["vorp:showposserve"] += new Action<List<string>>(ShowPosServe);
+
+            Tick += OnView;
+            Tick += OnTpView;
         }
+
+        
 
         public async void TpToWaypoint(List<object> args)
         {
@@ -157,6 +164,118 @@ namespace AdminUtilsClient.Teleports
             
         }
 
+        public async void TpToView(List<object> args)
+        {
+            try
+            {
+                //if (Utils.blip == -1)
+                //{
+                //    lastTpCoords = API.GetEntityCoords(API.PlayerPedId(), true, true);
+                //    Utils.CreateBlip();
+                //}
+                float XCoord = float.Parse(args[0].ToString());
+                float YCoord = float.Parse(args[1].ToString());
+                float ZCoord = 0.0f;
+                Vector3 chosenCoords = new Vector3(XCoord, YCoord, ZCoord);
+                await Utils.TeleportAndFoundGroundAsync(chosenCoords);
+
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+        }
+
+
+        [Tick]
+        public async Task OnTpView()
+        {
+            await Delay(0);
+            int entity = 0;
+            bool hit = false;
+            Vector3 endCoord = new Vector3();
+            Vector3 surfaceNormal = new Vector3();
+            Vector3 camCoords = API.GetGameplayCamCoord();
+            Vector3 sourceCoords = Utils.GetCoordsFromCam(100000.0F);
+            int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
+            API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
+
+
+
+            if (API.IsControlJustPressed(0, 0xCEE12B50) && tpView && endCoord.X != 0.0)
+            {
+                Utils.TeleportToCoords(endCoord.X, endCoord.Y, endCoord.Z);
+            }
+        }
+
+
+
+        [Tick]
+        public async Task OnView()
+        {
+            int entity = 0;
+            bool hit = false;
+            Vector3 endCoord = new Vector3();
+            Vector3 surfaceNormal = new Vector3();
+            Vector3 camCoords = API.GetGameplayCamCoord();
+            Vector3 sourceCoords = Utils.GetCoordsFromCam(1000.0F);
+            int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
+            API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
+            if (tpView)
+            {
+                //API.DrawLightWithRange(endCoord.X, endCoord.Y, endCoord.Z, 255, 255, 255, 2.0F, 200000000.0F);
+                Function.Call((Hash)0x2A32FAA57B937173, -1795314153, endCoord.X, endCoord.Y, endCoord.Z, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 50.0F, 255, 0, 0, 155, false, false, 2, false, 0, 0, false);
+            }
+        }
+
+
+        public void TpView(List<object> args)
+        {
+            if (tpView)
+            {
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
+                tpView = false;
+            }
+            else
+            {
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
+                tpView = true;
+            }
+            //API.GetShapeTestResult();
+            //API.StartEntityFire
+        }
+
+
+        public void Spos(List<object> args)
+        {
+            Debug.WriteLine("entra");
+            string name = args[0].ToString();
+           
+            Vector3 actualPos = API.GetEntityCoords(API.PlayerPedId(),true,true);
+            TriggerServerEvent("vorp:spos", name, actualPos);
+        }
+
+        public void ShowPos(List<object> args)
+        {
+            Debug.WriteLine("entra");
+            TriggerServerEvent("vorp:showpos");
+        }
+
+
+        private void ShowPosServe(List<string> savedPos)
+        {
+            Debug.WriteLine(savedPos[0].ToString());
+        }
+
+        //public void TpPos(List<object> args)
+        //{
+
+        //}
+
+        //public void DelPos(List<object> args)
+        //{
+
+        //}
 
 
     }

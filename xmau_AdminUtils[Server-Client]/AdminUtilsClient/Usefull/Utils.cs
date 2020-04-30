@@ -59,6 +59,7 @@ namespace AdminUtilsClient
             }
         }
 
+
         public static void CreateBlip()
         {
             blip = Function.Call<int>((Hash)0x554D9D53F696D002, 203020899, MethodsTeleports.lastTpCoords.X, MethodsTeleports.lastTpCoords.Y, MethodsTeleports.lastTpCoords.Z);
@@ -66,6 +67,71 @@ namespace AdminUtilsClient
             Function.Call((Hash)0x74F74D3207ED525C, blip, -1546805641, 1);
             Function.Call((Hash)0xD38744167B2FA257, blip, 0.2F);
             Function.Call((Hash)0x9CB1A1623062F402, blip, "LastPosition");
+        }
+
+        public static Vector3 GetCoordsFromCam(float distance)
+        {
+            Vector3 rot = API.GetGameplayCamRot(2);
+            Vector3 coord = API.GetGameplayCamCoord();
+
+            float tZ = rot.Z * 0.0174532924F;
+            float tX = rot.X * 0.0174532924F;
+
+
+
+
+            float num = (float)Math.Abs(Math.Cos(tX));
+
+            float newCoordX = coord.X + (float)(-Math.Sin(tZ)) * (num + distance);
+            float newCoordY = coord.Y + (float)(Math.Cos(tZ)) * (num + distance);
+            float newCoordZ = coord.Z + (float)(Math.Sin(tX)) * (num + distance);
+
+            return new Vector3(newCoordX, newCoordY, newCoordZ);
+        }
+
+        public static async Task<List<object>> GetCoordsByNUI(List<object> args)
+        {
+            string X = null;
+            string Y = null;
+            TriggerEvent("vorpinputs:getInput", "Introduce x", "x", new Action<dynamic>((coordX) =>
+            {
+                X = coordX;
+                args.Add(coordX);
+            }));
+
+            while (X == null)
+            {
+                await Delay(1000);
+            }
+
+            TriggerEvent("vorpinputs:getInput", "Introduce y", "y", new Action<dynamic>((coordY) =>
+            {
+                Y = coordY;
+                args.Add(coordY);
+            }));
+
+            while (Y == null)
+            {
+                await Delay(1000);
+            }
+
+            return args;
+        }
+
+        public async static Task<List<object>> GetOneByNUI(List<object> args,string title, string hint)
+        {
+            string postValue = null;
+            TriggerEvent("vorpinputs:getInput", title, hint, new Action<dynamic>((value) =>
+            {
+                postValue = value;
+                args.Add(value);
+            }));
+
+            while (postValue == null)
+            {
+                await Delay(1000);
+            }
+            return args;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace AdminUtilsClient.Peds
         {
             API.RegisterCommand("changeped", new Action<int, List<object>, string>((source, args, raw) =>
             {
-                AdminControl.executeAdminCommand("Changeped", args, "MethodsPeds");
+                AdminControl.executeAdminCommand("ChangeModel", args, "MethodsPeds");
             }), false);
         }
     }

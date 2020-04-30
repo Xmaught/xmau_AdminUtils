@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AdminUtilsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavesServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

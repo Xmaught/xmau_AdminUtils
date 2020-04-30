@@ -27,6 +27,8 @@ namespace AdminUtilsClient.Boosters
             Tick += OnFire;
         }
 
+
+
         public void Golden(List<object> args)
         {
             int pPedId = API.PlayerPedId();
@@ -198,7 +200,7 @@ namespace AdminUtilsClient.Boosters
             {
                 API.RemoveParticleFxFromEntity(entity);
                 API.RemoveParticleFxFromEntity(pedCreated);
-                API.StartEntityFire(entity, 0, 0, 1000);
+                //API.StartEntityFire(entity, 0, 0, 1000);
 
                 ghostRiderON = false;
             }
@@ -216,6 +218,7 @@ namespace AdminUtilsClient.Boosters
                     Function.Call((Hash)0x283978A15512B2FE, pedCreated, true);
                     //SetPedIntoVehicle
                     Function.Call((Hash)0x028F76B6E78246EB, API.PlayerPedId(), pedCreated, -1, false);
+                   
 
                     API.SetEntityInvincible(pedCreated, true);
                 }
@@ -235,14 +238,19 @@ namespace AdminUtilsClient.Boosters
             if (ghostRiderON)
             {
                 entity = API.PlayerPedId();
-                API.StartEntityFire(entity, 0, 0, 0);
+                API.TaskAnimalUnalerted(pedCreated, -1, 0, 0, 0);
+
+                //API.StartEntityFire(entity, 0, 0, 0);
 
                 API.SetEntityHealth(entity, API.GetEntityMaxHealth(entity, 0), 0);
                 Vector3 horseCoords = API.GetEntityCoords(pedCreated, true, true);
 
                 API.RequestNamedPtfxAsset((uint)API.GetHashKey("core"));
                 API.UseParticleFxAsset("core");
-                int ptfxh = API.StartParticleFxLoopedOnEntity("ent_amb_generic_fire_field", pedCreated, 0.4F, 0.4F, -1F, 0.0F, 0.0F, 0.0F, 2.5F, false, true, false);
+                API.StartParticleFxLoopedOnEntity("ent_amb_generic_fire_field", entity, 0.0F, 0.3F, -1F, 0.0F, 0.0F, 0.0F, 1.5F, true, true, true);
+                API.RequestNamedPtfxAsset((uint)API.GetHashKey("core"));
+                API.UseParticleFxAsset("core");
+                API.StartParticleFxLoopedOnEntity("ent_amb_generic_fire_field", pedCreated, 0.0F, 0.3F, -1F, 0.0F, 0.0F, 0.0F, 2.5F, true, true, true);
             }
         }
 
@@ -257,7 +265,7 @@ namespace AdminUtilsClient.Boosters
             Vector3 endCoord = new Vector3();
             Vector3 surfaceNormal = new Vector3();
             Vector3 camCoords = API.GetGameplayCamCoord();
-            Vector3 sourceCoords = GetCoordsFromCam(1000.0F);
+            Vector3 sourceCoords = Utils.GetCoordsFromCam(1000.0F);
             int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
             API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
             if (thorON)
@@ -277,7 +285,7 @@ namespace AdminUtilsClient.Boosters
             Vector3 endCoord = new Vector3();
             Vector3 surfaceNormal = new Vector3();
             Vector3 camCoords = API.GetGameplayCamCoord();
-            Vector3 sourceCoords = GetCoordsFromCam(1000.0F);
+            Vector3 sourceCoords = Utils.GetCoordsFromCam(1000.0F);
             int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
             API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
 
@@ -307,24 +315,6 @@ namespace AdminUtilsClient.Boosters
             //API.StartEntityFire
         }
 
-        public Vector3 GetCoordsFromCam(float distance)
-        {
-            Vector3 rot = API.GetGameplayCamRot(2);
-            Vector3 coord = API.GetGameplayCamCoord();
-
-            float tZ = rot.Z * 0.0174532924F;
-            float tX = rot.X * 0.0174532924F;
-
-
-
-
-            float num = (float)Math.Abs(Math.Cos(tX));
-
-            float newCoordX = coord.X + (float)(-Math.Sin(tZ)) * (num + distance);
-            float newCoordY = coord.Y + (float)(Math.Cos(tZ)) * (num + distance);
-            float newCoordZ = coord.Z + (float)(Math.Sin(tX)) * (num + distance);
-
-            return new Vector3(newCoordX, newCoordY, newCoordZ);
-        }
+        
     }
 }

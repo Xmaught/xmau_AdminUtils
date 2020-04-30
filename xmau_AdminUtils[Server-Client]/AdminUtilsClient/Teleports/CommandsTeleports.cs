@@ -36,11 +36,6 @@ namespace AdminUtilsClient.Teleports
                 AdminControl.executeAdminCommand("TpBring", args, "MethodsTeleports");
             }), false);
 
-            API.RegisterCommand("tpbring", new Action<int, List<object>, string>((source, args, raw) =>
-            {
-                AdminControl.executeAdminCommand("TpBring", args, "MethodsTeleports");
-            }), false);
-
             API.RegisterCommand("tpback", new Action<int, List<object>, string>((source, args, raw) =>
             {
                 AdminControl.executeAdminCommand("TpBack", args, "MethodsTeleports");
@@ -55,6 +50,31 @@ namespace AdminUtilsClient.Teleports
             {
                 AdminControl.executeAdminCommand("Guarma", args, "MethodsTeleports");
             }), false);
+
+            API.RegisterCommand("tpview", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("TpView", args, "MethodsTeleports");
+            }), false);
+
+            API.RegisterCommand("spos", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("Spos", args, "MethodsTeleports");
+            }), false);
+
+            //API.RegisterCommand("showpos", new Action<int, List<object>, string>((source, args, raw) =>
+            //{
+            //    AdminControl.executeAdminCommand("ShowPos", args, "MethodsTeleports");
+            //}), false);
+
+            //API.RegisterCommand("tppos", new Action<int, List<object>, string>((source, args, raw) =>
+            //{
+            //    AdminControl.executeAdminCommand("TpPos", args, "MethodsTeleports");
+            //}), false);
+
+            //API.RegisterCommand("delpos", new Action<int, List<object>, string>((source, args, raw) =>
+            //{
+            //    AdminControl.executeAdminCommand("DelPos", args, "MethodsTeleports");
+            //}), false);
         }
     }
 }

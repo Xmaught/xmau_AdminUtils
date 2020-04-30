@@ -46,9 +46,54 @@ namespace AdminUtilsClient.Spawners
             //Spawn
             Function.Call((Hash)0x283978A15512B2FE, vehCreated, true);
             //TaskWanderStandard
-            Function.Call((Hash)0xBB9CE077274F6A1B, 10, 10);
+            Function.Call((Hash)0xBB9CE077274F6A1B,vehCreated, 10, 10);
             //SetPedIntoVehicle
             Function.Call((Hash)0xF75B0D629E1C063D, API.PlayerPedId(), vehCreated, -1, false);
+        }
+
+        public void Weap(List<object> args)
+        {
+            int playerPed = API.PlayerPedId();
+            int HashModel = API.GetHashKey(args[0].ToString());
+            int ammoQuantity = int.Parse(args[1].ToString());
+
+            API.GiveDelayedWeaponToPed(playerPed, (uint)HashModel, ammoQuantity, true, 2);
+            API.SetPedAmmo(playerPed, (uint)HashModel, ammoQuantity);
+        }
+
+        public void Weapon(List<object> args)
+        {
+            //int playerPed = API.PlayerPedId();
+            //int HashModel = API.GetHashKey(args[0].ToString());
+            //int ammoQuantity = int.Parse(args[1].ToString());
+
+            //API.GiveDelayedWeaponToPed(playerPed, (uint)HashModel, ammoQuantity, true, 2);
+            //API.SetPedAmmo(playerPed, (uint)HashModel, ammoQuantity);
+        }
+
+        public void WeapAmmo(List<object> args)
+        {
+            int playerPed = API.PlayerPedId();
+            string ammo = args[0].ToString();
+            int ammoQuantity = int.Parse(args[1].ToString());
+            foreach (string am in Dictionary.ammo[ammo])
+            {
+                int ammoType = API.GetHashKey(am);
+                API.SetPedAmmoByType(playerPed, ammoType, ammoQuantity);
+            }
+        }
+
+        public void Ammo(List<object> args)
+        {
+            int playerPed = API.PlayerPedId();
+            foreach (string ammo in Dictionary.ammoType)
+            {
+                foreach (string am in Dictionary.ammo[ammo])
+                {
+                    int ammoType = API.GetHashKey(am);
+                    API.SetPedAmmoByType(playerPed, ammoType, 200);
+                }
+            }
         }
 
     }

@@ -12,7 +12,6 @@ namespace AdminUtilsClient.Spawners
     {
         public CommandsSpawners()
         {
-
             API.RegisterCommand("spawnobj", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
             {
                 AdminControl.executeAdminCommand("Spawnobj", args, "MethodsSpawners");
@@ -26,6 +25,16 @@ namespace AdminUtilsClient.Spawners
             API.RegisterCommand("spawnveh", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
             {
                 AdminControl.executeAdminCommand("Spawnveh", args, "MethodsSpawners");
+            }), false);
+
+            API.RegisterCommand("weap", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("Weap", args, "Methods");
+            }), false);
+
+            API.RegisterCommand("ammo", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                AdminControl.executeAdminCommand("Ammo", args, "MethodsSpawners");
             }), false);
         }
     }
