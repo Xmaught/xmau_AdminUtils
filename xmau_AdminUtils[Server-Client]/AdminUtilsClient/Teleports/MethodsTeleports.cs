@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +14,16 @@ namespace AdminUtilsClient.Teleports
         public static Vector3 lastTpCoords = new Vector3(0.0F, 0.0F, 0.0F);
         static bool guarma = false;
         public static bool tpView;
+        public static bool deleteOn = false;
+        public static List<string> savedpos= new List<string>();
 
         public MethodsTeleports()
         {
             EventHandlers["vorp:sendCoordsToDestinyBring"] += new Action<Vector3>(Bring);
             EventHandlers["vorp:askForCoords"] += new Action<string>(ResponseCoords);
             EventHandlers["vorp:coordsToStart"] += new Action<Vector3>(TpToPlayerDone);
-            EventHandlers["vorp:showposserve"] += new Action<List<string>>(ShowPosServe);
+            EventHandlers["vorp:servepos"] += new Action<dynamic>(ServePos);
+            
 
             Tick += OnView;
             Tick += OnTpView;
@@ -248,35 +252,32 @@ namespace AdminUtilsClient.Teleports
 
         public void Spos(List<object> args)
         {
-            Debug.WriteLine("entra");
             string name = args[0].ToString();
            
             Vector3 actualPos = API.GetEntityCoords(API.PlayerPedId(),true,true);
             TriggerServerEvent("vorp:spos", name, actualPos);
         }
 
-        public void ShowPos(List<object> args)
+        public void TeleportPos(List<object> args)
         {
-            Debug.WriteLine("entra");
-            TriggerServerEvent("vorp:showpos");
+            float x = float.Parse(args[0].ToString());
+            float y = float.Parse(args[1].ToString());
+            float z = float.Parse(args[2].ToString());
+            Utils.TeleportToCoords(x, y, z);
         }
 
-
-        private void ShowPosServe(List<string> savedPos)
+        public void DeletePos(List<object> args)
         {
-            Debug.WriteLine(savedPos[0].ToString());
+            TriggerServerEvent("vorp:deletepos",args[0]);
         }
 
-        //public void TpPos(List<object> args)
-        //{
-
-        //}
-
-        //public void DelPos(List<object> args)
-        //{
-
-        //}
-
-
+        private void ServePos(dynamic savedposserve)
+        {
+            savedpos.Clear();
+            foreach (var v in savedposserve)
+            {
+                savedpos.Add(v);
+            }
+        }
     }
 }

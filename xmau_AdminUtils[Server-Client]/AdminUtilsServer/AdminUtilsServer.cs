@@ -25,11 +25,11 @@ namespace AdminUtilsServer
             
         }
 
-        private void Spectate3(int sourceId, int destinyId)
+        private void Spectate3(int sourceId, int ped)
         {
             PlayerList pl = new PlayerList();
             Player p = pl[sourceId];
-            TriggerClientEvent(p, "vorp:requestPlayerToSpectate4", destinyId);
+            TriggerClientEvent(p, "vorp:requestPlayerToSpectate4", ped);
         }
 
         private void Spectate1([FromSource]Player player,int idDestinatary)

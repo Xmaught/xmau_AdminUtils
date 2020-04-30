@@ -8,6 +8,8 @@ using MenuAPI;
 using CitizenFX.Core.Native;
 using AdminUtilsClient.Boosters;
 using AdminUtilsClient.Teleports;
+using System.Data;
+using AdminUtilsClient.PlayerAdministration;
 
 namespace AdminUtilsClient
 {
@@ -45,25 +47,25 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
 
-                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner");
+                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(pedListItem);
 
-                        MenuListItem horsesListItem = new MenuListItem("Horses", Dictionary.horses, 0, "Horses spawner");
+                        MenuListItem horsesListItem = new MenuListItem("Horses", Dictionary.horses, 0, "Horses spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(horsesListItem);
 
-                        MenuListItem animalsListItem = new MenuListItem("Animals", Dictionary.animals, 0, "Animals spawner");
+                        MenuListItem animalsListItem = new MenuListItem("Animals", Dictionary.animals, 0, "Animals spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(animalsListItem);
 
-                        MenuListItem vehiclesListItem = new MenuListItem("Vehicles", Dictionary.vehicles, 0, "Vehicles spawner");
+                        MenuListItem vehiclesListItem = new MenuListItem("Vehicles", Dictionary.vehicles, 0, "Vehicles spawner. Command:/spawnveh vehiclemodel");
                         spawners.AddMenuItem(vehiclesListItem);
 
-                        MenuListItem objListItem = new MenuListItem("Objects", Dictionary.objects, 0, "Object spawner");
+                        MenuListItem objListItem = new MenuListItem("Objects", Dictionary.objects, 0, "Object spawner. Command:/spawnobj objectmodel");
                         spawners.AddMenuItem(objListItem);
 
                         MenuListItem weaponListItem = new MenuListItem("Weapons", Dictionary.weapons, 0, "Weapons spawner");
                         spawners.AddMenuItem(weaponListItem);
 
-                        spawners.AddMenuItem(new MenuItem("Weapon by name", "Weapon by name")
+                        spawners.AddMenuItem(new MenuItem("Weapon by name", "CLEAVER ANCIENT VIKING HEWING BIT HUNTER \n KNIVES CIVIL BEAR VAMPIRE LASSO \n MACHETE TOMAHAWK M1899 MAUSER SEMIAUTO VOLCANIC \n CARBINE EVANS HENRY VARMINT WINCHESTER CATTLEMAN \nDOUBLEACTION LEMAT SCHOFIELD BOLTACTION \n CARCANO ROLLINGBLOCK SPRINGFIELD DOUBLEBARREL \n PUMP REPEATING SAWEDOFF SEMIAUTO \n BOW DYNAMITE MOLOTOV")
                         {
                             Enabled = true,
                         });
@@ -117,87 +119,161 @@ namespace AdminUtilsClient
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
+                            Menu positions = new Menu("Positions", "Positions");
+                                MenuController.AddSubmenu(teleports, positions);
+
+                                MenuItem positionsButton = new MenuItem("Positions", "Save,teleport and delete coords")
+                                {
+                                    RightIcon = MenuItem.Icon.ARROW_RIGHT
+                                };
+                                teleports.AddMenuItem(positionsButton);
+                                MenuController.BindMenuItem(teleports, positions, positionsButton);
+                                    positions.AddMenuItem(new MenuItem("Add a new position", "Press here to save coords whit name. Command:/spos positionname")
+                                    {
+                                        Enabled = true,
+                                    });
+                                    positions.AddMenuItem(new MenuCheckboxItem("Delete", "Press here to activate delete mode.", MethodsTeleports.deleteOn)
+                                    {
+                                        Style = MenuCheckboxItem.CheckboxStyle.Tick
+                                    });
+                                    TriggerServerEvent("vorp:callpos");
+                                    await Delay(250);
+                                    foreach (string s in MethodsTeleports.savedpos)
+                                    {
+                                        string[] sPos = s.Split(',');
+                                        Debug.WriteLine(s);
+
+                                        positions.AddMenuItem(new MenuItem(sPos[0], "Press here to teleport to this saved coords")
+                                        {
+                                            Enabled = true,
+                                        });
+                                    }
+            
 
 
             Menu boosters = new Menu("Boosters", "Boosters");
                 MenuController.AddSubmenu(menu, boosters);
 
-                    MenuItem boostersButton = new MenuItem("Boosters", "This button is bound to a submenu. Clicking it will take you to the submenu.")
+                    MenuItem boostersButton = new MenuItem("Boosters", "Boosters for you own empowering.")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
                     menu.AddMenuItem(boostersButton);
                     MenuController.BindMenuItem(menu, boosters, boostersButton);
 
-                        boosters.AddMenuItem(new MenuItem("Golden", "Be Gold!")
+                        boosters.AddMenuItem(new MenuItem("Golden", "Be Gold! Command:/golden")
                         {
                             Enabled = true,
-                            LeftIcon = MenuItem.Icon.TICK
-
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "Be god!", MethodsBoosters.godmodeON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "Be god! Command:/gm", MethodsBoosters.godmodeON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Thor", "Be lightning!", MethodsBoosters.thorON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Thor", "Be lightning! Command:/thor. After activate it use mouse3 to throw lightnings", MethodsBoosters.thorON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("GhostRider", "Be fire!", MethodsBoosters.ghostRiderON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("GhostRider", "Be fire! Command:/gr", MethodsBoosters.ghostRiderON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Noclip", "Be weightless!", MethodsBoosters.noclip)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Noclip", "Be weightless! Command:/n. W,A,S,D,Z,X,UpArrow,DownArrow,C", MethodsBoosters.noclip)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
             Menu peds = new Menu("Peds", "Peds");
                 MenuController.AddSubmenu(menu, peds);
 
-                    MenuItem pedButton = new MenuItem("Peds", "This button is bound to a submenu. Clicking it will take you to the submenu.")
+                    MenuItem pedButton = new MenuItem("Peds", "Menu to change your ped(Most of them cant use weapons).")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
                     menu.AddMenuItem(pedButton);
                     MenuController.BindMenuItem(menu, peds, pedButton);
 
-                        MenuListItem pedHumanListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner");
+                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.peds, 0, "Press here to change your ped to another human. Command:/changeped pedmodel");
                         peds.AddMenuItem(pedHumanListItem);
 
-                        MenuListItem pedAnimalListItem = new MenuListItem("Peds", Dictionary.animals, 0, "Ped spawner");
+                        MenuListItem pedAnimalListItem = new MenuListItem("Animal", Dictionary.animals, 0, "Press here to change your ped to an animal. Command:/changeped pedmodel");
                         peds.AddMenuItem(pedAnimalListItem);
 
 
             Menu administration = new Menu("Administration", "Administration");
                 MenuController.AddSubmenu(menu, administration);
 
-                    MenuItem administrationButton = new MenuItem("Administration", "This button is bound to a submenu. Clicking it will take you to the submenu.")
+                    MenuItem administrationButton = new MenuItem("Administration", "Administration menu")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
                     menu.AddMenuItem(administrationButton);
                     MenuController.BindMenuItem(menu, administration, administrationButton);
 
+                        Menu playersList = new Menu("Players list", "Players list");
+                        MenuController.AddSubmenu(administration, playersList);
 
+                        MenuItem playerListButton = new MenuItem("Players list", "Players list")
+                        {
+                            RightIcon = MenuItem.Icon.ARROW_RIGHT
+                        };
+                        administration.AddMenuItem(playerListButton);
+                        MenuController.BindMenuItem(administration, playersList, playerListButton);
+
+                            
+
+                        Menu bansList = new Menu("Bans", "Bans");
+                        MenuController.AddSubmenu(administration, bansList);
+
+                        MenuItem bansButton = new MenuItem("Bans", "Bans Menu")
+                        {
+                            RightIcon = MenuItem.Icon.ARROW_RIGHT
+                        };
+                        administration.AddMenuItem(bansButton);
+                        MenuController.BindMenuItem(administration, bansList, bansButton);
+
+                            bansList.AddMenuItem(new MenuItem("Fast ban", "Fast ban. Command:/ban id reason.")
+                            {
+                                Enabled = true,
+                            });
+                            bansList.AddMenuItem(new MenuCheckboxItem("Delete ban", "Press here to activate delete mode", MethodsPlayerAdministration.deleteOn)
+                            {
+                                Style = MenuCheckboxItem.CheckboxStyle.Tick
+                            });
+
+                            TriggerServerEvent("vorp:callbans");
+                            await Delay(250);
+                            foreach (string s in MethodsPlayerAdministration.savedbans)
+                            {
+                                string[] sBan = s.Split(',');
+                                Debug.WriteLine(s);
+
+                                bansList.AddMenuItem(new MenuItem(sBan[0], sBan[1])
+                                {
+                                    Enabled = true,
+                                });
+                            }
+
+                                
             Menu notifications = new Menu("Notifications", "Notifications");
                 MenuController.AddSubmenu(menu, notifications);
 
-                    MenuItem notificationButton = new MenuItem("Notifications", "This button is bound to a submenu. Clicking it will take you to the submenu.")
+                    MenuItem notificationButton = new MenuItem("Notifications", "Notification menu")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
                     menu.AddMenuItem(notificationButton);
                     MenuController.BindMenuItem(menu, notifications, notificationButton);
 
-                        notifications.AddMenuItem(new MenuItem("Pm", "This is a simple button with a simple description. Scroll down for more button types!")
+                        notifications.AddMenuItem(new MenuItem("Pm", "Press here to send a private message")
                         {
                             Enabled = true,
-                            LeftIcon = MenuItem.Icon.TICK
-
+                        });
+                        notifications.AddMenuItem(new MenuItem("Bc", "Press here to send a broadcast message")
+                        {
+                            Enabled = true,
                         });
 
             menu.OpenMenu();
@@ -372,7 +448,49 @@ namespace AdminUtilsClient
                 }
             };
 
-            peds.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            positions.OnCheckboxChange += (_menu, _item, _index, _checked) =>
+            {
+                if (_index == 1)
+                {
+                    MethodsTeleports.deleteOn = _checked;
+                }
+            };
+
+
+            positions.OnItemSelect += async (_menu, _item, _index) =>
+            {
+                if (_index == 0)
+                {
+                    args = await Utils.GetOneByNUI(args, "Name position", "Name position");
+                    AdminControl.executeAdminCommand("Spos", args, "MethodsTeleports");
+                    args.Clear();
+                }
+                if (_index > 1)
+                {
+                    if (MethodsTeleports.deleteOn)
+                    {
+                        args.Add(_index - 2);
+                        AdminControl.executeAdminCommand("DeletePos", args, "MethodsTeleports");
+                        MethodsTeleports.deleteOn = false;
+                        positions.CloseMenu();
+                        teleports.CloseMenu();
+                        menu.CloseMenu();
+                        args.Clear();
+                    }
+                    else
+                    {
+                        string[] pos = MethodsTeleports.savedpos[_index - 2].Split(',');
+                        args.Add(pos[1]);
+                        args.Add(pos[2]);
+                        args.Add(pos[3]);
+
+                        AdminControl.executeAdminCommand("TeleportPos", args, "MethodsTeleports");
+                        args.Clear();
+                    }
+                }
+            };
+
+                peds.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
                 Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
                 if (_itemIndex == 0)
@@ -388,6 +506,41 @@ namespace AdminUtilsClient
                     animalList.Add(Dictionary.animals[_listIndex]);
                     Debug.WriteLine(animalList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", animalList, "MethodsPeds");
+                }
+            };
+
+            bansList.OnCheckboxChange += (_menu, _item, _index, _checked) =>
+            {
+                if (_index == 1)
+                {
+                    MethodsPlayerAdministration.deleteOn = _checked;
+                }
+            };
+
+            bansList.OnItemSelect += async (_menu, _item, _index) =>
+            {
+                if (_index == 0)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("Sbans", args, "MethodsPlayerAdministration");
+                    args.Clear();
+                }
+                if (_index > 1)
+                {
+                    if (MethodsPlayerAdministration.deleteOn)
+                    {
+                        args.Add(_index - 2);
+                        AdminControl.executeAdminCommand("DeleteBans", args, "MethodsPlayerAdministration");
+                        MethodsPlayerAdministration.deleteOn = false;
+                        bansList.CloseMenu();
+                        administration.CloseMenu();
+                        menu.CloseMenu();
+                        args.Clear();
+                    }
+                    else
+                    {
+                        //view reason
+                    }
                 }
             };
         }

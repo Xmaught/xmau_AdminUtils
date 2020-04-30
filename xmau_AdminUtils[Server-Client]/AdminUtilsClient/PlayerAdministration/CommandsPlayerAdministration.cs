@@ -12,15 +12,15 @@ namespace AdminUtilsClient.PlayerAdministration
     {
         public CommandsPlayerAdministration()
         {
-            API.RegisterCommand("spec", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
-            {
-                AdminControl.executeAdminCommand("Spec", args, "MethodsPlayerAdministration");
-            }), false);
+            //API.RegisterCommand("spec", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
+            //{
+            //    AdminControl.executeAdminCommand("Spec", args, "MethodsPlayerAdministration");
+            //}), false);
 
-            API.RegisterCommand("sspec", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
-            {
-                AdminControl.executeAdminCommand("SSpec", args, "MethodsPlayerAdministration");
-            }), false);
+            //API.RegisterCommand("sspec", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
+            //{
+            //    AdminControl.executeAdminCommand("SSpec", args, "MethodsPlayerAdministration");
+            //}), false);
 
             API.RegisterCommand("stop", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
             {
@@ -35,6 +35,10 @@ namespace AdminUtilsClient.PlayerAdministration
             API.RegisterCommand("k", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
             {
                 AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+            }), false);
+            API.RegisterCommand("ban", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
+            {
+                AdminControl.executeAdminCommand("Sbans", args, "MethodsPlayerAdministration");
             }), false);
         }
     }
