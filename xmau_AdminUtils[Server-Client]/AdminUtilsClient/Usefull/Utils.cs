@@ -118,6 +118,35 @@ namespace AdminUtilsClient
             return args;
         }
 
+        public static async Task<List<object>> GetTwoByNUI(List<object> args)
+        {
+            string X = null;
+            string Y = null;
+            TriggerEvent("vorpinputs:getInput", "Player id", "id", new Action<dynamic>((coordX) =>
+            {
+                X = coordX;
+                args.Add(coordX);
+            }));
+
+            while (X == null)
+            {
+                await Delay(1000);
+            }
+
+            TriggerEvent("vorpinputs:getInput", "Message", "message", new Action<dynamic>((coordY) =>
+            {
+                Y = coordY;
+                args.Add(coordY);
+            }));
+
+            while (Y == null)
+            {
+                await Delay(1000);
+            }
+
+            return args;
+        }
+
         public async static Task<List<object>> GetOneByNUI(List<object> args,string title, string hint)
         {
             string postValue = null;
@@ -133,5 +162,83 @@ namespace AdminUtilsClient
             }
             return args;
         }
+
+        //public void getNearestPlayers()
+        //{
+        //    float closestDistance = 5.0F;
+        //    int localPed = API.PlayerPedId();
+        //    int playerId = API.PlayerId();
+        //    Vector3 coords = API.GetEntityCoords(localPed, true, true);
+        //    List<int> closestPlayers = new List<int>();
+        //    List<int> players = new List<int>();
+        //    foreach (var player in API.GetActivePlayers())
+        //    {
+        //        players.Add(player);
+        //    }
+
+        //    foreach (var player in players)
+        //    {
+        //        int target = API.GetPlayerPed(player);
+        //        if (target != localPed)
+        //        {
+        //            Vector3 targetCoords = API.GetEntityCoords(target, true, true);
+        //            float distance = API.GetDistanceBetweenCoords(targetCoords.X, targetCoords.Y, targetCoords.Z,
+        //                coords.X, coords.Y, coords.Z, false);
+
+        //            if (closestDistance > distance)
+        //            {
+        //                closestPlayers.Add(player);
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var VARIABLE in closestPlayers)
+        //    {
+        //        // Debug.WriteLine(VARIABLE.ToString());
+        //        // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
+        //        // Debug.WriteLine(localPed.ToString());
+        //        Debug.WriteLine(API.GetPlayerName(VARIABLE));
+        //        Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
+        //    }
+        //}
+
+        //public void getNearestPlayers()
+        //{
+        //    float closestDistance = 5.0F;
+        //    int localPed = API.PlayerPedId();
+        //    Vector3 coords = API.GetEntityCoords(localPed, true, true);
+        //    List<int> closestPlayers = new List<int>();
+        //    List<int> players = new List<int>();
+        //    foreach (var player in API.GetActivePlayers())
+        //    {
+        //        players.Add(player);
+        //    }
+
+        //    foreach (var player in players)
+        //    {
+        //        int target = API.GetPlayerPed(player);
+        //        if (target != localPed)
+        //        {
+        //            Vector3 targetCoords = API.GetEntityCoords(target, true, true);
+        //            float distance = API.GetDistanceBetweenCoords(targetCoords.X, targetCoords.Y, targetCoords.Z,
+        //                coords.X, coords.Y, coords.Z, false);
+
+        //            if (closestDistance > distance)
+        //            {
+        //                closestPlayers.Add(player);
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var VARIABLE in closestPlayers)
+        //    {
+        //        // Debug.WriteLine(VARIABLE.ToString());
+        //        // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
+        //        // Debug.WriteLine(localPed.ToString());
+        //        Debug.WriteLine(API.GetPlayerName(VARIABLE));
+        //        Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
+        //    }
+
+        //}
     }
 }

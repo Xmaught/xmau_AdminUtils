@@ -128,7 +128,7 @@ namespace AdminUtilsClient
                                 };
                                 teleports.AddMenuItem(positionsButton);
                                 MenuController.BindMenuItem(teleports, positions, positionsButton);
-                                    positions.AddMenuItem(new MenuItem("Add a new position", "Press here to save coords whit name. Command:/spos positionname")
+                                    positions.AddMenuItem(new MenuItem("Add a new position", "Press here to save coords whit name or: Command:/spos positionname")
                                     {
                                         Enabled = true,
                                     });
@@ -161,27 +161,27 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(boostersButton);
                     MenuController.BindMenuItem(menu, boosters, boostersButton);
 
-                        boosters.AddMenuItem(new MenuItem("Golden", "Be Gold! Command:/golden")
+                        boosters.AddMenuItem(new MenuItem("Golden", "Press here to be gold or: Command:/golden")
                         {
                             Enabled = true,
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "Be god! Command:/gm", MethodsBoosters.godmodeON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Godmode", "Press here to be god or Command:/gm", MethodsBoosters.godmodeON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Thor", "Be lightning! Command:/thor. After activate it use mouse3 to throw lightnings", MethodsBoosters.thorON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Thor", "Press here to be lightning or: Command:/thor. After activate it use mouse3 to throw lightnings", MethodsBoosters.thorON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("GhostRider", "Be fire! Command:/gr", MethodsBoosters.ghostRiderON)
+                        boosters.AddMenuItem(new MenuCheckboxItem("GhostRider", "Press here to be fire! Command:/gr", MethodsBoosters.ghostRiderON)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
 
-                        boosters.AddMenuItem(new MenuCheckboxItem("Noclip", "Be weightless! Command:/n. W,A,S,D,Z,X,UpArrow,DownArrow,C", MethodsBoosters.noclip)
+                        boosters.AddMenuItem(new MenuCheckboxItem("Noclip", "Press here to be weightless or: Command:/n. W,A,S,D,Z,X,UpArrow,DownArrow,C", MethodsBoosters.noclip)
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
@@ -195,10 +195,10 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(pedButton);
                     MenuController.BindMenuItem(menu, peds, pedButton);
 
-                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.peds, 0, "Press here to change your ped to another human. Command:/changeped pedmodel");
+                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.peds, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
                         peds.AddMenuItem(pedHumanListItem);
 
-                        MenuListItem pedAnimalListItem = new MenuListItem("Animal", Dictionary.animals, 0, "Press here to change your ped to an animal. Command:/changeped pedmodel");
+                        MenuListItem pedAnimalListItem = new MenuListItem("Animal", Dictionary.animals, 0, "Press here to change your ped to an animal or: Command:/changeped pedmodel");
                         peds.AddMenuItem(pedAnimalListItem);
 
 
@@ -222,7 +222,18 @@ namespace AdminUtilsClient
                         administration.AddMenuItem(playerListButton);
                         MenuController.BindMenuItem(administration, playersList, playerListButton);
 
-                            
+                        administration.AddMenuItem(new MenuItem("Kick player", "Press here to kick a player form server or: Command:/k id.")
+                        {
+                            Enabled = true,
+                        });
+                        administration.AddMenuItem(new MenuItem("Freeze", "Press here to freeze player or: Command:/stop id.")
+                        {
+                            Enabled = true,
+                        });
+                        administration.AddMenuItem(new MenuItem("Slap", "Slap a player or: Command:/slap id.")
+                        {
+                            Enabled = true,
+                        });
 
                         Menu bansList = new Menu("Bans", "Bans");
                         MenuController.AddSubmenu(administration, bansList);
@@ -234,7 +245,7 @@ namespace AdminUtilsClient
                         administration.AddMenuItem(bansButton);
                         MenuController.BindMenuItem(administration, bansList, bansButton);
 
-                            bansList.AddMenuItem(new MenuItem("Fast ban", "Fast ban. Command:/ban id reason.")
+                            bansList.AddMenuItem(new MenuItem("Fast ban", "Press here to do a fast ban or: Command:/ban id reason.")
                             {
                                 Enabled = true,
                             });
@@ -255,6 +266,7 @@ namespace AdminUtilsClient
                                     Enabled = true,
                                 });
                             }
+
 
                                 
             Menu notifications = new Menu("Notifications", "Notifications");
@@ -509,6 +521,25 @@ namespace AdminUtilsClient
                 }
             };
 
+            administration.OnItemSelect += async (_menu, _item, _index) =>
+            {
+                if (_index == 1)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+                }
+                else if (_index == 2)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("Stop", args, "MethodsPlayerAdministration");
+                }
+                else if (_index == 3)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("Slap", args, "MethodsPlayerAdministration");
+                }
+            };
+
             bansList.OnCheckboxChange += (_menu, _item, _index, _checked) =>
             {
                 if (_index == 1)
@@ -537,10 +568,19 @@ namespace AdminUtilsClient
                         menu.CloseMenu();
                         args.Clear();
                     }
-                    else
-                    {
-                        //view reason
-                    }
+                }
+            };
+            notifications.OnItemSelect += async (_menu, _item, _index) =>
+            {
+                if (_index == 0)
+                {
+                    args = await Utils.GetTwoByNUI(args);
+                    AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+                }
+                else if (_index == 1)
+                {
+                    args = await Utils.GetOneByNUI(args, "Message", "message");
+                    AdminControl.executeAdminCommand("Stop", args, "MethodsPlayerAdministration");
                 }
             };
         }
