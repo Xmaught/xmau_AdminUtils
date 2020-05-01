@@ -89,57 +89,28 @@ namespace AdminUtilsClient
             return new Vector3(newCoordX, newCoordY, newCoordZ);
         }
 
-        public static async Task<List<object>> GetCoordsByNUI(List<object> args)
+        public static async Task<List<object>> GetTwoByNUI(List<object> args,string label, string hint, string label2, string hint2)
         {
-            string X = null;
-            string Y = null;
-            TriggerEvent("vorpinputs:getInput", "Introduce x", "x", new Action<dynamic>((coordX) =>
+            string V1 = null;
+            string V2 = null;
+            TriggerEvent("vorpinputs:getInput", label, hint, new Action<dynamic>((value1) =>
             {
-                X = coordX;
-                args.Add(coordX);
+                V1 = value1;
+                args.Add(V1);
             }));
 
-            while (X == null)
+            while (V1 == null)
             {
                 await Delay(1000);
             }
 
-            TriggerEvent("vorpinputs:getInput", "Introduce y", "y", new Action<dynamic>((coordY) =>
+            TriggerEvent("vorpinputs:getInput", label2, hint2, new Action<dynamic>((value2) =>
             {
-                Y = coordY;
-                args.Add(coordY);
+                V2 = value2;
+                args.Add(V2);
             }));
 
-            while (Y == null)
-            {
-                await Delay(1000);
-            }
-
-            return args;
-        }
-
-        public static async Task<List<object>> GetTwoByNUI(List<object> args)
-        {
-            string X = null;
-            string Y = null;
-            TriggerEvent("vorpinputs:getInput", "Player id", "id", new Action<dynamic>((coordX) =>
-            {
-                X = coordX;
-                args.Add(coordX);
-            }));
-
-            while (X == null)
-            {
-                await Delay(1000);
-            }
-
-            TriggerEvent("vorpinputs:getInput", "Message", "message", new Action<dynamic>((coordY) =>
-            {
-                Y = coordY;
-                args.Add(coordY);
-            }));
-
-            while (Y == null)
+            while (V2 == null)
             {
                 await Delay(1000);
             }
@@ -162,45 +133,6 @@ namespace AdminUtilsClient
             }
             return args;
         }
-
-        //public void getNearestPlayers()
-        //{
-        //    float closestDistance = 5.0F;
-        //    int localPed = API.PlayerPedId();
-        //    int playerId = API.PlayerId();
-        //    Vector3 coords = API.GetEntityCoords(localPed, true, true);
-        //    List<int> closestPlayers = new List<int>();
-        //    List<int> players = new List<int>();
-        //    foreach (var player in API.GetActivePlayers())
-        //    {
-        //        players.Add(player);
-        //    }
-
-        //    foreach (var player in players)
-        //    {
-        //        int target = API.GetPlayerPed(player);
-        //        if (target != localPed)
-        //        {
-        //            Vector3 targetCoords = API.GetEntityCoords(target, true, true);
-        //            float distance = API.GetDistanceBetweenCoords(targetCoords.X, targetCoords.Y, targetCoords.Z,
-        //                coords.X, coords.Y, coords.Z, false);
-
-        //            if (closestDistance > distance)
-        //            {
-        //                closestPlayers.Add(player);
-        //            }
-        //        }
-        //    }
-
-        //    foreach (var VARIABLE in closestPlayers)
-        //    {
-        //        // Debug.WriteLine(VARIABLE.ToString());
-        //        // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
-        //        // Debug.WriteLine(localPed.ToString());
-        //        Debug.WriteLine(API.GetPlayerName(VARIABLE));
-        //        Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
-        //    }
-        //}
 
         //public void getNearestPlayers()
         //{

@@ -33,14 +33,14 @@ namespace AdminUtilsClient
         public async Task AdminUtilsMenu()
         {
             await Delay(0);
-            Menu menu = new Menu("AdminUtils", "Administration Menu");
+            Menu menu = new Menu("AdminUtils", "");
             MenuController.AddMenu(menu);
 
 
-                Menu spawners = new Menu("Spawners", "Spawners");
+                Menu spawners = new Menu("Spawners", "");
                 MenuController.AddSubmenu(menu, spawners);
 
-                    MenuItem spawnersButton = new MenuItem("Spawners", "This button is bound to a submenu. Clicking it will take you to the submenu.")
+                    MenuItem spawnersButton = new MenuItem("Spawners", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -81,7 +81,7 @@ namespace AdminUtilsClient
             Menu teleports = new Menu("Teleports", "Teleports");
                 MenuController.AddSubmenu(menu, teleports);
 
-                    MenuItem teleportButton = new MenuItem("Teleports", "Teleports Menu")
+                    MenuItem teleportButton = new MenuItem("Teleports", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -151,10 +151,10 @@ namespace AdminUtilsClient
             
 
 
-            Menu boosters = new Menu("Boosters", "Boosters");
+            Menu boosters = new Menu("Boosters", "");
                 MenuController.AddSubmenu(menu, boosters);
 
-                    MenuItem boostersButton = new MenuItem("Boosters", "Boosters for you own empowering.")
+                    MenuItem boostersButton = new MenuItem("Boosters", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -185,10 +185,10 @@ namespace AdminUtilsClient
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
-            Menu peds = new Menu("Peds", "Peds");
+            Menu peds = new Menu("Peds", "");
                 MenuController.AddSubmenu(menu, peds);
 
-                    MenuItem pedButton = new MenuItem("Peds", "Menu to change your ped(Most of them cant use weapons).")
+                    MenuItem pedButton = new MenuItem("Peds", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -202,10 +202,10 @@ namespace AdminUtilsClient
                         peds.AddMenuItem(pedAnimalListItem);
 
 
-            Menu administration = new Menu("Administration", "Administration");
+            Menu administration = new Menu("Administration", "");
                 MenuController.AddSubmenu(menu, administration);
 
-                    MenuItem administrationButton = new MenuItem("Administration", "Administration menu")
+                    MenuItem administrationButton = new MenuItem("Administration", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -235,10 +235,10 @@ namespace AdminUtilsClient
                             Enabled = true,
                         });
 
-                        Menu bansList = new Menu("Bans", "Bans");
+                        Menu bansList = new Menu("Bans", "");
                         MenuController.AddSubmenu(administration, bansList);
 
-                        MenuItem bansButton = new MenuItem("Bans", "Bans Menu")
+                        MenuItem bansButton = new MenuItem("Bans", "")
                         {
                             RightIcon = MenuItem.Icon.ARROW_RIGHT
                         };
@@ -269,10 +269,10 @@ namespace AdminUtilsClient
 
 
                                 
-            Menu notifications = new Menu("Notifications", "Notifications");
+            Menu notifications = new Menu("Notifications", "");
                 MenuController.AddSubmenu(menu, notifications);
 
-                    MenuItem notificationButton = new MenuItem("Notifications", "Notification menu")
+                    MenuItem notificationButton = new MenuItem("Notifications", "")
                     {
                         RightIcon = MenuItem.Icon.ARROW_RIGHT
                     };
@@ -423,7 +423,7 @@ namespace AdminUtilsClient
                 }
                 else if (_index == 1)
                 {
-                    args = await Utils.GetCoordsByNUI(args);
+                    args = await Utils.GetTwoByNUI(args,"X Coord","0.0","Y Coord","0.0");
                     AdminControl.executeAdminCommand("TpToCoords", args, "MethodsTeleports");
                     args.Clear();
                 }
@@ -574,13 +574,15 @@ namespace AdminUtilsClient
             {
                 if (_index == 0)
                 {
-                    args = await Utils.GetTwoByNUI(args);
-                    AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+                    args = await Utils.GetTwoByNUI(args,"Id player","id","Message","message");
+                    AdminControl.executeAdminCommand("PrivateMessage", args, "MethodsNotifications");
+                    args.Clear();
                 }
                 else if (_index == 1)
                 {
                     args = await Utils.GetOneByNUI(args, "Message", "message");
-                    AdminControl.executeAdminCommand("Stop", args, "MethodsPlayerAdministration");
+                    AdminControl.executeAdminCommand("BroadCast", args, "MethodsNotifications");
+                    args.Clear();
                 }
             };
         }
