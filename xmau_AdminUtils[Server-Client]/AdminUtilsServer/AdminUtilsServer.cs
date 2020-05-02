@@ -9,7 +9,6 @@ namespace AdminUtilsServer
 {
     public class AdminUtilsServer : BaseScript
     {
-
         public AdminUtilsServer()
         {
             EventHandlers["vorp:ownerCoordsToBring"] += new Action<Vector3, int>(CoordsToBringPlayer);
@@ -20,9 +19,31 @@ namespace AdminUtilsServer
             EventHandlers["vorp:broadCastMessage"] += new Action<Player, string>(BroadCastMessage);
             EventHandlers["vorp:slap"] += new Action<Player, int>(Slap); 
             EventHandlers["vorp:stopplayer"] += new Action<Player, int>(StopP);
+            EventHandlers["vorp:thor"] += new Action<Vector3>(ThorServer);
             EventHandlers["vorp:requestPlayerToSpectate1"] += new Action<Player,int>(Spectate1);
             EventHandlers["vorp:requestPlayerToSpectate3"] += new Action<int, int>(Spectate3);
+            EventHandlers["redemrp:playerLoaded"] += new Action<int, dynamic>(GetAdmin);
+        }
+
+        private void GetAdmin(int source, dynamic user)
+        {
+            bool admin = false;
+            PlayerList pl = new PlayerList();
+            Player p = pl[source];
+
+            Debug.WriteLine(user.getGroup());
+                if (user.getGroup() == "admin")
+                {
+                    admin = true;
+                    p.TriggerEvent("vorp:setAdmin", admin);
+                }
             
+        }
+
+        private void ThorServer(Vector3 thorCoords)
+        {
+            Debug.WriteLine("entra server");
+            TriggerClientEvent("vorp:thordone", thorCoords);
         }
 
         private void Spectate3(int sourceId, int ped)
@@ -34,23 +55,15 @@ namespace AdminUtilsServer
 
         private void Spectate1([FromSource]Player player,int idDestinatary)
         {
-            
             PlayerList pl = new PlayerList();
             Player p = pl[idDestinatary];
-            
-
             TriggerClientEvent(p, "vorp:requestPlayerToSpectate2",player.Handle);
         }
 
 
 
 
-        /// <summary>
-        /// Method that send source coords for bring method
-        /// </summary>
-        /// <param name="ply">Player source</param>
-        /// <param name="coordToSend"> Vector3 coordsFromSource </param>
-        /// <param name="destinataryID"> int idDestinatary </param>
+        
         private void CoordsToBringPlayer(Vector3 coordToSend, int destinataryID)
         {
             PlayerList pl = new PlayerList();
@@ -58,11 +71,7 @@ namespace AdminUtilsServer
             TriggerClientEvent(p, "vorp:sendCoordsToDestinyBring", coordToSend);
         }
 
-        /// <summary>
-        /// Method that ask for the coords of the player destinatary
-        /// </summary>
-        /// <param name="ply"> Player source </param>
-        /// <param name="destinataryID"> int idDestinatary </param>
+       
         private void CoordsToPlayerDestiny([FromSource]Player ply, int destinataryID)
         {
             PlayerList pl = new PlayerList();
@@ -70,11 +79,7 @@ namespace AdminUtilsServer
             TriggerClientEvent(p, "vorp:askForCoords", ply.Handle);
         }
 
-        /// <summary>
-        /// Method that make a callback whit the desired coords
-        /// </summary>
-        /// <param name="sourceID">Player sourceToResponse</param>
-        /// <param name="coordsDestiny"> Vector3 coordOfDestiny</param>
+        
         private void CoordsToStart(string sourceID, Vector3 coordsDestiny)
         {
             PlayerList pl = new PlayerList();

@@ -21,13 +21,15 @@ namespace AdminUtilsClient.Boosters
         static int pedCreated = 0;
         public MethodsBoosters()
         {
+            EventHandlers["vorp:thordone"] += new Action<Vector3>(ThorDone);
+
             Tick += Noc;
             Tick += OnClick;
             Tick += OnLight;
             Tick += OnFire;
         }
 
-
+        
 
         public void Golden(List<object> args)
         {
@@ -293,12 +295,16 @@ namespace AdminUtilsClient.Boosters
 
             if (API.IsControlJustPressed(0, 0xCEE12B50) && thorON)
             {
-
-                API.ForceLightningFlashAtCoords(endCoord.X, endCoord.Y, endCoord.Z);
+                TriggerServerEvent("vorp:thor", endCoord);
+                
             }
         }
 
-
+        private void ThorDone(Vector3 endCooord)
+        {
+            Debug.WriteLine("vuelve cliente");
+            API.ForceLightningFlashAtCoords(endCooord.X, endCooord.Y, endCooord.Z);
+        }
 
 
         public void Thor(List<object> args)

@@ -10,6 +10,7 @@ using AdminUtilsClient.Boosters;
 using AdminUtilsClient.Teleports;
 using System.Data;
 using AdminUtilsClient.PlayerAdministration;
+using AdminUtilsClient.Deletes;
 
 namespace AdminUtilsClient
 {
@@ -24,9 +25,10 @@ namespace AdminUtilsClient
         [Tick]
         private async Task OpenMenu()
         {
-            if (API.IsControlJustPressed(0, 0x446258B6))
+            if (API.IsControlJustPressed(0, 0x446258B6) && AdminControl.isAdmin)
             {
                 await AdminUtilsMenu();
+                await Delay(5000);
             }
         }
 
@@ -148,7 +150,26 @@ namespace AdminUtilsClient
                                             Enabled = true,
                                         });
                                     }
-            
+                                    Menu places = new Menu("Places", "Places");
+                                    MenuController.AddSubmenu(teleports, places);
+                                    MenuItem placesButton = new MenuItem("Places", "Places")
+                                    {
+                                        RightIcon = MenuItem.Icon.ARROW_RIGHT
+                                    };
+                                    teleports.AddMenuItem(placesButton);
+                                    MenuController.BindMenuItem(teleports, places, placesButton);
+                                        List<string> place = new List<string>();
+                                        foreach (string a in Dictionary.places.Keys) {
+                                                    place.Add(a);
+                                            }
+                                            MenuListItem placesList = new MenuListItem("Places", place, 0, "Weapons spawner");
+                                            places.AddMenuItem(placesList);
+
+
+            //teleports.AddMenuItem(new MenuCheckboxItem("Delele on view", "Press here activate delete on view or Command:/delview", MethodsDeletes.onDel)
+            //{
+            //Style = MenuCheckboxItem.CheckboxStyle.Tick
+            //});
 
 
             Menu boosters = new Menu("Boosters", "");
@@ -279,16 +300,16 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(notificationButton);
                     MenuController.BindMenuItem(menu, notifications, notificationButton);
 
-                        notifications.AddMenuItem(new MenuItem("Pm", "Press here to send a private message")
+                        notifications.AddMenuItem(new MenuItem("Pm", "Press here to send a private message or Command:/pm id message")
                         {
                             Enabled = true,
                         });
-                        notifications.AddMenuItem(new MenuItem("Bc", "Press here to send a broadcast message")
+                        notifications.AddMenuItem(new MenuItem("Bc", "Press here to send a broadcast message or Command:/bc id message")
                         {
                             Enabled = true,
                         });
 
-            menu.OpenMenu();
+            
 
             //SPAWNER MENU CALLS
 
@@ -502,7 +523,24 @@ namespace AdminUtilsClient
                 }
             };
 
-                peds.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            places.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            {
+                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
+                if (_itemIndex == 0)
+                {
+                    var pla = Dictionary.places.ToArray();
+                    args.Add(pla[_listIndex].Value.X);
+                    args.Add(pla[_listIndex].Value.Y);
+                    args.Add(pla[_listIndex].Value.Z);
+
+                    AdminControl.executeAdminCommand("TeleportPos", args, "MethodsTeleports");
+                    args.Clear();
+
+                    
+                }
+            };
+
+            peds.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
                 Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
                 if (_itemIndex == 0)
@@ -585,6 +623,7 @@ namespace AdminUtilsClient
                     args.Clear();
                 }
             };
+            menu.OpenMenu();
         }
     }
 }

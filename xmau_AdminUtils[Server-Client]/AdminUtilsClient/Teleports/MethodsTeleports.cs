@@ -86,10 +86,10 @@ namespace AdminUtilsClient.Teleports
         /// Method that receive coords from the server to make an teleport requested by admin
         /// </summary>
         /// <param name="bringCoords"></param>
-        public async void Bring(Vector3 bringCoords)
+        public void Bring(Vector3 bringCoords)
         {
             Debug.WriteLine(bringCoords.X.ToString());
-            await Utils.TeleportAndFoundGroundAsync(bringCoords);
+            Utils.TeleportToCoords(bringCoords.X, bringCoords.Y, bringCoords.Z);
         }
 
 
@@ -126,16 +126,16 @@ namespace AdminUtilsClient.Teleports
         /// <param name="coordsToTp"></param>
         private async void TpToPlayerDone(Vector3 coordsToTp)
         {
-            await Utils.TeleportAndFoundGroundAsync(coordsToTp);
+            Utils.TeleportToCoords(coordsToTp.X,coordsToTp.Y,coordsToTp.Z);
         }
 
-        public async void TpBack(List<object> args)
+        public void TpBack(List<object> args)
         {
             if (Utils.blip != -1)
             {
                 API.RemoveBlip(ref Utils.blip);
                 Utils.blip = -1;
-                await Utils.TeleportAndFoundGroundAsync(lastTpCoords);
+                Utils.TeleportToCoords(lastTpCoords.X,lastTpCoords.Y,lastTpCoords.Z);
             }
         }
 
@@ -151,7 +151,7 @@ namespace AdminUtilsClient.Teleports
 
             if (!guarma)
             {
-                API.SetEntityCoords(API.PlayerPedId(), 1606.34F, -4096.1F, 89.68F,false,false,false,false);
+                API.SetEntityCoords(API.PlayerPedId(), 1471.457F, -7128.961F, 75.80013F, false,false,false,false);
                 Function.Call((Hash)0xA657EC9DBC6CC900, 1935063277);
                 Function.Call((Hash)0xE8770EE02AEE45C2, 1);
                 Function.Call((Hash)0x74E2261D2A66849A, true);
@@ -159,7 +159,7 @@ namespace AdminUtilsClient.Teleports
             }
             else
             {
-                API.SetEntityCoords(API.PlayerPedId(), 1606.34F, -4096.1F, 89.68F, false, false, false, false);
+                API.SetEntityCoords(API.PlayerPedId(), 318.1798F, -1296.762F, 44.15731F, false, false, false, false);
                 Function.Call((Hash)0xA657EC9DBC6CC900, -1868977180);
                 Function.Call((Hash)0xE8770EE02AEE45C2, 0);
                 Function.Call((Hash)0x74E2261D2A66849A, false);
@@ -167,29 +167,6 @@ namespace AdminUtilsClient.Teleports
             }
             
         }
-
-        public async void TpToView(List<object> args)
-        {
-            try
-            {
-                //if (Utils.blip == -1)
-                //{
-                //    lastTpCoords = API.GetEntityCoords(API.PlayerPedId(), true, true);
-                //    Utils.CreateBlip();
-                //}
-                float XCoord = float.Parse(args[0].ToString());
-                float YCoord = float.Parse(args[1].ToString());
-                float ZCoord = 0.0f;
-                Vector3 chosenCoords = new Vector3(XCoord, YCoord, ZCoord);
-                await Utils.TeleportAndFoundGroundAsync(chosenCoords);
-
-            }
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-        }
-
 
         [Tick]
         public async Task OnTpView()
@@ -228,7 +205,7 @@ namespace AdminUtilsClient.Teleports
             if (tpView)
             {
                 //API.DrawLightWithRange(endCoord.X, endCoord.Y, endCoord.Z, 255, 255, 255, 2.0F, 200000000.0F);
-                Function.Call((Hash)0x2A32FAA57B937173, -1795314153, endCoord.X, endCoord.Y, endCoord.Z, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 50.0F, 255, 0, 0, 155, false, false, 2, false, 0, 0, false);
+                Function.Call((Hash)0x2A32FAA57B937173, -1795314153, endCoord.X, endCoord.Y, endCoord.Z, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 50.0F, 0, 255, 0, 155, false, false, 2, false, 0, 0, false);
             }
         }
 

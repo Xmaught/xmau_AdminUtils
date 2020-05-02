@@ -1,4 +1,5 @@
 ﻿using AdminUtilsClient.Boosters;
+using AdminUtilsClient.Deletes;
 using AdminUtilsClient.Help;
 using AdminUtilsClient.Notifications;
 using AdminUtilsClient.Peds;
@@ -16,8 +17,19 @@ using System.Threading.Tasks;
 
 namespace AdminUtilsClient
 {
-    public class AdminControl
+    public class AdminControl : BaseScript
     {
+        public AdminControl()
+        {
+            EventHandlers["vorp:setAdmin"] += new Action<bool>(setAdmin);
+        }
+
+        public static bool isAdmin = false;
+        private void setAdmin(bool adm)
+        {
+            isAdmin = adm;
+        }
+
         static Type type;
         static MethodsHelp methHelp;
         static MethodsSpawners methSpawners;
@@ -25,11 +37,16 @@ namespace AdminUtilsClient
         static MethodsBoosters methBoosters;
         static MethodsPeds methPeds;
         static MethodsNotifications methNotifications;
-        static MethodsPlayerAdministration methodsPlayerAdministration;
+        static MethodsPlayerAdministration methPlayerAdministration;
         static Methods meth;
+        static MethodsDeletes methDeletes;
 
         public static void executeAdminCommand(string command, List<object> args, string cl)
         {
+            if (!isAdmin)
+            {
+                return;
+            }
             if(cl == "MethodsHelp")
             {
                 type = typeof(MethodsHelp);
@@ -76,8 +93,8 @@ namespace AdminUtilsClient
             {
                 type = typeof(MethodsPlayerAdministration);
                 MethodInfo mi = type.GetMethod(command);
-                methodsPlayerAdministration = new MethodsPlayerAdministration();
-                mi.Invoke(methodsPlayerAdministration, new Object[] { args });
+                methPlayerAdministration = new MethodsPlayerAdministration();
+                mi.Invoke(methPlayerAdministration, new Object[] { args });
             }
             else if (cl == "Methods")
             {
@@ -85,6 +102,13 @@ namespace AdminUtilsClient
                 MethodInfo mi = type.GetMethod(command);
                 meth = new Methods();
                 mi.Invoke(meth, new Object[] { args });
+            }
+            else if (cl == "MethodsDeletes")
+            {
+                type = typeof(MethodsDeletes);
+                MethodInfo mi = type.GetMethod(command);
+                methDeletes = new MethodsDeletes();
+                mi.Invoke(methDeletes, new Object[] { args });
             }
         }
     }

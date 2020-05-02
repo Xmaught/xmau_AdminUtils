@@ -36,6 +36,7 @@ namespace AdminUtilsClient
         public static void TeleportToCoords(float x, float y, float z, float heading = 0.0f)
         {
             int playerPedId = API.PlayerPedId();
+            heading = API.GetEntityHeading(playerPedId);
             API.SetEntityCoords(playerPedId, x, y, z, true, true, true, false);
             API.SetEntityHeading(playerPedId, heading);
         }
@@ -134,43 +135,45 @@ namespace AdminUtilsClient
             return args;
         }
 
-        //public void getNearestPlayers()
-        //{
-        //    float closestDistance = 5.0F;
-        //    int localPed = API.PlayerPedId();
-        //    Vector3 coords = API.GetEntityCoords(localPed, true, true);
-        //    List<int> closestPlayers = new List<int>();
-        //    List<int> players = new List<int>();
-        //    foreach (var player in API.GetActivePlayers())
-        //    {
-        //        players.Add(player);
-        //    }
+        public void getNearestPlayers()
+        {
+            float closestDistance = 5.0F;
+            int localPed = API.PlayerPedId();
+            Vector3 coords = API.GetEntityCoords(localPed, true, true);
+            List<int> closestPlayers = new List<int>();
+            List<int> players = new List<int>();
+            foreach (var player in API.GetActivePlayers())
+            {
+                players.Add(player);
+            }
 
-        //    foreach (var player in players)
-        //    {
-        //        int target = API.GetPlayerPed(player);
-        //        if (target != localPed)
-        //        {
-        //            Vector3 targetCoords = API.GetEntityCoords(target, true, true);
-        //            float distance = API.GetDistanceBetweenCoords(targetCoords.X, targetCoords.Y, targetCoords.Z,
-        //                coords.X, coords.Y, coords.Z, false);
+            foreach (var player in players)
+            {
+                int target = API.GetPlayerPed(player);
+                if (target != localPed)
+                {
+                    Vector3 targetCoords = API.GetEntityCoords(target, true, true);
+                    float distance = API.GetDistanceBetweenCoords(targetCoords.X, targetCoords.Y, targetCoords.Z,
+                        coords.X, coords.Y, coords.Z, false);
 
-        //            if (closestDistance > distance)
-        //            {
-        //                closestPlayers.Add(player);
-        //            }
-        //        }
-        //    }
+                    if (closestDistance > distance)
+                    {
+                        closestPlayers.Add(player);
+                    }
+                }
+            }
 
-        //    foreach (var VARIABLE in closestPlayers)
-        //    {
-        //        // Debug.WriteLine(VARIABLE.ToString());
-        //        // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
-        //        // Debug.WriteLine(localPed.ToString());
-        //        Debug.WriteLine(API.GetPlayerName(VARIABLE));
-        //        Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
-        //    }
+            foreach (var VARIABLE in closestPlayers)
+            {
+                // Debug.WriteLine(VARIABLE.ToString());
+                // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
+                // Debug.WriteLine(localPed.ToString());
+                Debug.WriteLine(API.GetPlayerName(VARIABLE));
+                Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
+            }
 
-        //}
+
+
+        }
     }
 }
