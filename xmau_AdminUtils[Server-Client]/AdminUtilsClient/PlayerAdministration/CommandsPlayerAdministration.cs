@@ -40,6 +40,10 @@ namespace AdminUtilsClient.PlayerAdministration
             {
                 AdminControl.executeAdminCommand("Sbans", args, "MethodsPlayerAdministration");
             }), false);
+            API.RegisterCommand("playerlist", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
+            {
+                AdminControl.executeAdminCommand("PlayerList", args, "MethodsPlayerAdministration");
+            }), false);
         }
     }
 }

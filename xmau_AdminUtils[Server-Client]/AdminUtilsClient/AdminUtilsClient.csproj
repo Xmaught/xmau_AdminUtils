@@ -75,6 +75,8 @@
     <Compile Include="Usefull\Utils.cs" />
     <Compile Include="Weapons\CommandsWeapons.cs" />
     <Compile Include="Weapons\MethodsWeapons.cs" />
+    <Compile Include="WeatherTime\CommandsWeatherTime.cs" />
+    <Compile Include="WeatherTime\MethodsWeatherTime.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

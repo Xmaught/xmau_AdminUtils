@@ -20,15 +20,21 @@ namespace AdminUtilsClient.Boosters
         public static bool ghostRiderON = false;
         static int entity;
         static int pedCreated = 0;
+
+        static bool fireguy = false;
         public MethodsBoosters()
         {
             EventHandlers["vorp:thordone"] += new Action<Vector3>(ThorDone);
+            EventHandlers["vorp:thorIDdone"] += new Action(ThorIDdone);
+            EventHandlers["vorp:fireIDdone"] += new Action(FireIDDone);
 
             Tick += Noc;
             Tick += Noc2;
             Tick += OnClick;
             Tick += OnLight;
             Tick += OnFire;
+            Tick += fireON;
+            
         }
 
         
@@ -425,6 +431,49 @@ namespace AdminUtilsClient.Boosters
             //API.StartEntityFire
         }
 
-        
+        public void ThorToId(List<object> args)
+        {
+            int id = int.Parse(args[0].ToString());
+            TriggerServerEvent("vorp:thorIDserver",id);
+        }
+        private void ThorIDdone()
+        {
+            Vector3 endCoord = API.GetEntityCoords(API.PlayerPedId(), true, true);
+            API.ForceLightningFlashAtCoords(endCoord.X, endCoord.Y, endCoord.Z);
+        }
+
+        public void FireToId(List<object> args)
+        {
+            int id = int.Parse(args[0].ToString());
+            TriggerServerEvent("vorp:fireIDserver", id);
+        }
+
+        private void FireIDDone()
+        {
+            if (!fireguy)
+            {
+                fireguy = true;
+            }
+            else
+            {
+                fireguy = false;
+            }
+           
+        }
+
+        [Tick]
+        private async Task fireON()
+        {
+
+            if (!API.IsEntityDead(API.PlayerPedId()) && fireguy)
+            {
+                API.StartEntityFire(API.PlayerPedId(), 0, 0, 100000);
+            }
+            else
+            {
+                fireguy = false;
+            }
+            await Delay(2000);
+        }
     }
 }

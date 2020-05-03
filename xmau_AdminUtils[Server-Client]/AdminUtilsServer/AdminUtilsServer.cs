@@ -23,6 +23,8 @@ namespace AdminUtilsServer
             EventHandlers["vorp:requestPlayerToSpectate1"] += new Action<Player,int>(Spectate1);
             EventHandlers["vorp:requestPlayerToSpectate3"] += new Action<int, int>(Spectate3);
             EventHandlers["redemrp:playerLoaded"] += new Action<int, dynamic>(GetAdmin);
+            EventHandlers["vorp:thorIDserver"] += new Action<Player, int>(ThorToId);
+            EventHandlers["vorp:fireIDserver"] += new Action<Player, int>(FireToId);
         }
 
         private void GetAdmin(int source, dynamic user)
@@ -119,6 +121,19 @@ namespace AdminUtilsServer
         private void BroadCastMessage([FromSource]Player player, string message)
         {
             TriggerClientEvent("vorp:NotifyLeft", player.Name, message, "generic_textures", "tick", 12000);
+        }
+
+        private void ThorToId([FromSource]Player player, int idDestinatary)
+        {
+            PlayerList pl = new PlayerList();
+            Player p = pl[idDestinatary];
+            TriggerClientEvent(p, "vorp:thorIDdone");
+        }
+        private void FireToId([FromSource]Player player, int idDestinatary)
+        {
+            PlayerList pl = new PlayerList();
+            Player p = pl[idDestinatary];
+            TriggerClientEvent(p, "vorp:fireIDdone");
         }
     }
 }

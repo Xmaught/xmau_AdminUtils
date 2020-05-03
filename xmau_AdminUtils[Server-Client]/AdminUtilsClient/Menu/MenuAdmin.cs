@@ -64,7 +64,7 @@ namespace AdminUtilsClient
                         });
 
                 Menu spawners = new Menu("Spawners", "");
-                MenuController.AddSubmenu(menu, spawners);
+                    MenuController.AddSubmenu(menu, spawners);
 
                     MenuItem spawnersButton = new MenuItem("Spawners", "")
                     {
@@ -96,7 +96,28 @@ namespace AdminUtilsClient
                         MenuListItem teenListItem = new MenuListItem("Teens/kids", Dictionary.pedsT, 0, "Ped spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(teenListItem);
 
+            Menu dvs = new Menu("Deletes", "Deletes");
+                MenuController.AddSubmenu(menu, dvs);
 
+                MenuItem dvsButton = new MenuItem("Deletes", "")
+                {
+                    RightIcon = MenuItem.Icon.ARROW_RIGHT
+                };
+                menu.AddMenuItem(dvsButton);
+                MenuController.BindMenuItem(menu, dvs, dvsButton);
+
+                    dvs.AddMenuItem(new MenuCheckboxItem("Delele on view", "Press here activate delete on view or Command:/delview (Whit this you can delete all kinds of peds and vehicles)", MethodsDeletes.onDel)
+                    {
+                    Style = MenuCheckboxItem.CheckboxStyle.Tick
+                    });
+                    dvs.AddMenuItem(new MenuItem("Delete vehicles", "Delete vehicles whitout driver or:\n Command:/dv")
+                    {
+                        Enabled = true,
+                    });
+                    dvs.AddMenuItem(new MenuItem("Delete horses", "Delete horses while you are seated on or:\n Command:/dvh")
+                    {
+                        Enabled = true,
+                    });
 
             Menu teleports = new Menu("Teleports", "Teleports");
                 MenuController.AddSubmenu(menu, teleports);
@@ -184,10 +205,7 @@ namespace AdminUtilsClient
                                             places.AddMenuItem(placesList);
 
 
-            //teleports.AddMenuItem(new MenuCheckboxItem("Delele on view", "Press here activate delete on view or Command:/delview", MethodsDeletes.onDel)
-            //{
-            //Style = MenuCheckboxItem.CheckboxStyle.Tick
-            //});
+            
 
 
             Menu boosters = new Menu("Boosters", "");
@@ -279,6 +297,14 @@ namespace AdminUtilsClient
                         {
                             Enabled = true,
                         });
+                        administration.AddMenuItem(new MenuItem("Lighting", "Press here to lightning a player or: Command:/thorp id.")
+                        {
+                            Enabled = true,
+                        });
+                        administration.AddMenuItem(new MenuItem("Fire", "Press here to burn a player till die or: Command:/firep id.")
+                        {
+                            Enabled = true,
+                        });
 
                         Menu bansList = new Menu("Bans", "");
                         MenuController.AddSubmenu(administration, bansList);
@@ -341,7 +367,7 @@ namespace AdminUtilsClient
                     weaponList.Add(Dictionary.weapons[_listIndex]);
                     Debug.WriteLine(weaponList[0].ToString());
                     weaponList.Add(200);
-                    AdminControl.executeAdminCommand("Weap", weaponList, "MethodsSpawners");
+                    AdminControl.executeAdminCommand("Weap", weaponList, "MethodsWeapons");
                     foreach (string am in Dictionary.ammoType)
                     {
                         if (weaponList[0].ToString().Contains(am))
@@ -349,7 +375,7 @@ namespace AdminUtilsClient
                             List<object> ammoList = new List<object>();
                             ammoList.Add(am);
                             ammoList.Add(200);
-                            AdminControl.executeAdminCommand("WeapAmmo", ammoList, "MethodsSpawners");
+                            AdminControl.executeAdminCommand("WeapAmmo", ammoList, "MethodsWeapons");
                         }
                     }
                 }
@@ -359,7 +385,7 @@ namespace AdminUtilsClient
                     ammoList.Add(Dictionary.ammoType[_listIndex]);
                     Debug.WriteLine(ammoList[0].ToString());
                     ammoList.Add(200);
-                    AdminControl.executeAdminCommand("WeapAmmo", ammoList, "MethodsSpawners");
+                    AdminControl.executeAdminCommand("WeapAmmo", ammoList, "MethodsWeapons");
                 }
             };
 
@@ -377,14 +403,14 @@ namespace AdminUtilsClient
                         Debug.WriteLine(weap);
                         args.Add(weap);
                         args.Add(200);
-                        AdminControl.executeAdminCommand("Weap", args, "MethodsSpawners");
+                        AdminControl.executeAdminCommand("Weap", args, "MethodsWeapons");
                     }
                     args.Clear();
                 }
                 else if (_index == 3)
                 {
                     Debug.WriteLine("ammo");
-                    AdminControl.executeAdminCommand("Ammo", args, "MethodsSpawners");
+                    AdminControl.executeAdminCommand("Ammo", args, "MethodsWeapons");
                 }
 
             };
@@ -447,6 +473,25 @@ namespace AdminUtilsClient
                     AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
                 }
 
+            };
+
+            dvs.OnCheckboxChange += (_menu, _item, _index, _checked) =>
+            {
+                if (_index == 0)
+                {
+                    MethodsDeletes.onDel = _checked;
+                }
+            };
+            dvs.OnItemSelect += (_menu, _item, _index) =>
+            {
+                if (_index == 1)
+                {
+                    AdminControl.executeAdminCommand("DeleteVehicle", args, "MethodsDeletes");
+                }
+                else if (_index == 2)
+                {
+                    AdminControl.executeAdminCommand("DeleteHorse", args, "MethodsDeletes");
+                }
             };
 
             //BOOSTERS MENU CALLS
@@ -624,16 +669,31 @@ namespace AdminUtilsClient
                 {
                     args = await Utils.GetOneByNUI(args, "Id player", "Id player");
                     AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+                    args.Clear();
                 }
                 else if (_index == 2)
                 {
                     args = await Utils.GetOneByNUI(args, "Id player", "Id player");
                     AdminControl.executeAdminCommand("Stop", args, "MethodsPlayerAdministration");
+                    args.Clear();
                 }
                 else if (_index == 3)
                 {
                     args = await Utils.GetOneByNUI(args, "Id player", "Id player");
                     AdminControl.executeAdminCommand("Slap", args, "MethodsPlayerAdministration");
+                    args.Clear();
+                }
+                else if (_index == 4)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("ThorToId", args, "MethodsBoosters");
+                    args.Clear();
+                }
+                else if (_index == 5)
+                {
+                    args = await Utils.GetOneByNUI(args, "Id player", "Id player");
+                    AdminControl.executeAdminCommand("FireToId", args, "MethodsBoosters");
+                    args.Clear();
                 }
             };
 

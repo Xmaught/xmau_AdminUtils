@@ -14,6 +14,7 @@ namespace AdminUtilsClient.PlayerAdministration
         static bool handcuffed = false;
         public static bool deleteOn = false;
         public static List<string> savedbans = new List<string>();
+        public static List<int> playerList = new List<int>();
         //static Vector3 pCCoords;
         public MethodsPlayerAdministration()
         {
@@ -132,6 +133,24 @@ namespace AdminUtilsClient.PlayerAdministration
             foreach (var v in savedbansserve)
             {
                 savedbans.Add(v);
+            }
+        }
+
+        public void PlayerList(List<object> args)
+        {
+            
+            List<int> playerList = new List<int>();
+            foreach (var i in API.GetActivePlayers())
+            {
+                playerList.Add(i);
+                
+            }
+
+            foreach (var i in playerList)
+            {
+                Debug.WriteLine("Player id: "+API.GetPlayerServerId(i).ToString());
+                Debug.WriteLine("Player ped: "+API.GetPlayerPed(i).ToString());
+                Debug.WriteLine("Player name: "+API.GetPlayerName(i).ToString());
             }
         }
     }
