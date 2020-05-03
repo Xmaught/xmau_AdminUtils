@@ -25,7 +25,7 @@ namespace AdminUtilsClient
         [Tick]
         private async Task OpenMenu()
         {
-            if (API.IsControlJustPressed(0, 0x446258B6) && AdminControl.isAdmin)
+            if (API.IsControlJustPressed(0, 0x446258B6) /*&& AdminControl.isAdmin*/)
             {
                 await AdminUtilsMenu();
                 await Delay(5000);
@@ -49,7 +49,7 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
 
-                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.peds, 0, "Ped spawner. Command:/spawnped pedmodel");
+                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.pedsTest, 0, "Ped spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(pedListItem);
 
                         MenuListItem horsesListItem = new MenuListItem("Horses", Dictionary.horses, 0, "Horses spawner. Command:/spawnped pedmodel");
@@ -216,7 +216,7 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(pedButton);
                     MenuController.BindMenuItem(menu, peds, pedButton);
 
-                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.peds, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
+                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.pedsTest, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
                         peds.AddMenuItem(pedHumanListItem);
 
                         MenuListItem pedAnimalListItem = new MenuListItem("Animal", Dictionary.animals, 0, "Press here to change your ped to an animal or: Command:/changeped pedmodel");
@@ -319,7 +319,7 @@ namespace AdminUtilsClient
                 if(_itemIndex == 0)
                 {
                     List<object> pedsList = new List<object>();
-                    pedsList.Add(Dictionary.peds[_listIndex]);
+                    pedsList.Add(Dictionary.pedsTest[_listIndex]);
                     Debug.WriteLine(pedsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped",pedsList,"MethodsSpawners");
                 }
@@ -546,7 +546,7 @@ namespace AdminUtilsClient
                 if (_itemIndex == 0)
                 {
                     List<object> pedList = new List<object>();
-                    pedList.Add(Dictionary.peds[_listIndex]);
+                    pedList.Add(Dictionary.pedsTest[_listIndex]);
                     Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
                 }

@@ -110,7 +110,6 @@ namespace AdminUtilsClient.Boosters
                 API.FreezeEntityPosition(playerPed, false);
                 //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
                 noclip = false;
-
             }
         }
 
@@ -118,14 +117,33 @@ namespace AdminUtilsClient.Boosters
         private async Task Noc()
         {
             await Delay(0);
+            int playerPed = API.PlayerPedId();
             if (noclip)
             {
-                int playerPed = API.PlayerPedId();
                 API.SetEntityHeading(playerPed, heading);
-                if (API.IsControlPressed(0, 0x8FD015D8)) //W
+                if (API.IsControlPressed(0, 0xF84FA74F)) //RightClick
                 {
-                    Vector3 c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.0F);
-                    API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    //double z = (double)(Math.Sin(API.GetGameplayCamRot(0).X)) / (Math.Sin(90.0D - API.GetGameplayCamRot(0).X)) * speed;
+                    Vector3 a = API.GetGameplayCamRot(0);
+                    Debug.WriteLine("eso:" + (a.X - 1.0F).ToString());
+                    //Debug.WriteLine("X cam: " + API.GetGameplayCamRot(0).X.ToString());
+
+                    Vector3 c = new Vector3();
+                    if (a.X > 8.0F)
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -0.5F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
+                    else if (a.X < -8.0F)
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.5F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
+                    else
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.0F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
                 }
 
                 if (API.IsControlPressed(0, 0xD27782E3)) //S
@@ -146,7 +164,7 @@ namespace AdminUtilsClient.Boosters
                     API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                 }
 
-                if (API.IsControlPressed(0, 0x26E9DC00)) //Z
+                if (API.IsControlPressed(0, 0xD9D0E1C0)) //CONTROL
                 {
                     Vector3 c = new Vector3();
                     if (speed > 1.0F)
@@ -160,7 +178,7 @@ namespace AdminUtilsClient.Boosters
                     API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                 }
 
-                if (API.IsControlPressed(0, 0x8CC9CD42)) //X
+                if (API.IsControlPressed(0, 0x8FFC75D6)) //SHIFT
                 {
                     Vector3 c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, 0.0F, speed - 1.0F);
                     API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
@@ -184,15 +202,22 @@ namespace AdminUtilsClient.Boosters
                 {
                     speed = 1.28F;
                 }
-                if (API.IsControlPressed(0, 0xDE794E3E)) //Q
+                if (API.IsControlPressed(0, 0x07CE1E61)) //LeftClick
                 {
-                    heading = heading + 2.0F;
-                }
-                if (API.IsControlPressed(0, 0xCEFD9220)) //E
-                {
-                    heading = heading - 2.0F;
+                    List<object> args = new List<object>();
+                    Noclip(args);
                 }
 
+                //if (API.IsControlPressed(0, 0xDE794E3E)) //Q
+                //{
+                //    heading = heading + 3.0F;
+                //}
+                //if (API.IsControlPressed(0, 0xCEFD9220)) //E
+                //{
+                //    heading = heading - 3.0F;
+                //}
+                heading += API.GetGameplayCamRelativeHeading();
+                               
             }
         }
 

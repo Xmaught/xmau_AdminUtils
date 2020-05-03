@@ -43,10 +43,10 @@ namespace AdminUtilsClient
 
         public static void executeAdminCommand(string command, List<object> args, string cl)
         {
-            if (!isAdmin)
+            /*if (!isAdmin)
             {
                 return;
-            }
+            }*/
             if(cl == "MethodsHelp")
             {
                 type = typeof(MethodsHelp);
