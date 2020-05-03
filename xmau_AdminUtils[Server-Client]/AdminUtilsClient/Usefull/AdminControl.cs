@@ -6,6 +6,7 @@ using AdminUtilsClient.Peds;
 using AdminUtilsClient.PlayerAdministration;
 using AdminUtilsClient.Spawners;
 using AdminUtilsClient.Teleports;
+using AdminUtilsClient.Weapons;
 using CitizenFX.Core;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,7 @@ namespace AdminUtilsClient
         static MethodsPlayerAdministration methPlayerAdministration;
         static Methods meth;
         static MethodsDeletes methDeletes;
+        static MethodsWeapons methWeapons;
 
         public static void executeAdminCommand(string command, List<object> args, string cl)
         {
@@ -53,6 +55,13 @@ namespace AdminUtilsClient
                 MethodInfo mi = type.GetMethod(command);
                 methHelp = new MethodsHelp();
                 mi.Invoke(methHelp, new Object[] { args });
+            }
+            else if (cl == "MethodsWeapons")
+            {
+                type = typeof(MethodsWeapons);
+                MethodInfo mi = type.GetMethod(command);
+                methWeapons = new MethodsWeapons();
+                mi.Invoke(methWeapons, new Object[] { args });
             }
             else if(cl == "MethodsSpawners")
             {

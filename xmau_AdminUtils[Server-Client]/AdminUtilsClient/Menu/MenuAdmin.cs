@@ -37,7 +37,31 @@ namespace AdminUtilsClient
             await Delay(0);
             Menu menu = new Menu("AdminUtils", "");
             MenuController.AddMenu(menu);
+                Menu weapons = new Menu("Weapons", "");
+                MenuController.AddSubmenu(menu, weapons);
 
+                    MenuItem weaponsButton = new MenuItem("Weapons", "")
+                    {
+                        RightIcon = MenuItem.Icon.ARROW_RIGHT
+                    };
+                    menu.AddMenuItem(weaponsButton);
+                    MenuController.BindMenuItem(menu, weapons, weaponsButton);
+
+                        MenuListItem weaponListItem = new MenuListItem("Weapons", Dictionary.weapons, 0, "Weapons spawner");
+                        weapons.AddMenuItem(weaponListItem);
+
+                        weapons.AddMenuItem(new MenuItem("Weapon by name", "CLEAVER ANCIENT VIKING HEWING BIT HUNTER \n KNIVES CIVIL BEAR VAMPIRE LASSO \n MACHETE TOMAHAWK M1899 MAUSER SEMIAUTO VOLCANIC \n CARBINE EVANS HENRY VARMINT WINCHESTER CATTLEMAN \nDOUBLEACTION LEMAT SCHOFIELD BOLTACTION \n CARCANO ROLLINGBLOCK SPRINGFIELD DOUBLEBARREL \n PUMP REPEATING SAWEDOFF SEMIAUTO \n BOW DYNAMITE MOLOTOV")
+                        {
+                            Enabled = true,
+                        });
+
+                        MenuListItem ammoListItem = new MenuListItem("Ammo", Dictionary.ammoType, 0, "Ammo spawner");
+                        weapons.AddMenuItem(ammoListItem);
+
+                        weapons.AddMenuItem(new MenuItem("All ammo", "All ammo")
+                        {
+                            Enabled = true,
+                        });
 
                 Menu spawners = new Menu("Spawners", "");
                 MenuController.AddSubmenu(menu, spawners);
@@ -49,8 +73,7 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
 
-                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.pedsM, 0, "Ped spawner. Command:/spawnped pedmodel");
-                        spawners.AddMenuItem(pedListItem);
+                        
 
                         MenuListItem horsesListItem = new MenuListItem("Horses", Dictionary.horses, 0, "Horses spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(horsesListItem);
@@ -64,21 +87,16 @@ namespace AdminUtilsClient
                         MenuListItem objListItem = new MenuListItem("Objects", Dictionary.objects, 0, "Object spawner. Command:/spawnobj objectmodel");
                         spawners.AddMenuItem(objListItem);
 
-                        MenuListItem weaponListItem = new MenuListItem("Weapons", Dictionary.weapons, 0, "Weapons spawner");
-                        spawners.AddMenuItem(weaponListItem);
+                        MenuListItem maleListItem = new MenuListItem("Male", Dictionary.pedsM, 0, "Ped spawner. Command:/spawnped pedmodel");
+                        spawners.AddMenuItem(maleListItem);
 
-                        spawners.AddMenuItem(new MenuItem("Weapon by name", "CLEAVER ANCIENT VIKING HEWING BIT HUNTER \n KNIVES CIVIL BEAR VAMPIRE LASSO \n MACHETE TOMAHAWK M1899 MAUSER SEMIAUTO VOLCANIC \n CARBINE EVANS HENRY VARMINT WINCHESTER CATTLEMAN \nDOUBLEACTION LEMAT SCHOFIELD BOLTACTION \n CARCANO ROLLINGBLOCK SPRINGFIELD DOUBLEBARREL \n PUMP REPEATING SAWEDOFF SEMIAUTO \n BOW DYNAMITE MOLOTOV")
-                        {
-                            Enabled = true,
-                        });
+                        MenuListItem femaleListItem = new MenuListItem("Female", Dictionary.pedsF, 0, "Ped spawner. Command:/spawnped pedmodel");
+                        spawners.AddMenuItem(femaleListItem);
 
-                        MenuListItem ammoListItem = new MenuListItem("Ammo", Dictionary.ammoType, 0, "Ammo spawner");
-                        spawners.AddMenuItem(ammoListItem);
+                        MenuListItem teenListItem = new MenuListItem("Teens/kids", Dictionary.pedsT, 0, "Ped spawner. Command:/spawnped pedmodel");
+                        spawners.AddMenuItem(teenListItem);
 
-                        spawners.AddMenuItem(new MenuItem("All ammo", "All ammo")
-                        {
-                            Enabled = true,
-                        });
+
 
             Menu teleports = new Menu("Teleports", "Teleports");
                 MenuController.AddSubmenu(menu, teleports);
@@ -315,49 +333,9 @@ namespace AdminUtilsClient
                             Enabled = true,
                         });
 
-            
-
-            //SPAWNER MENU CALLS
-
-            spawners.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            weapons.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
-                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
-                if(_itemIndex == 0)
-                {
-                    List<object> pedsList = new List<object>();
-                    pedsList.Add(Dictionary.pedsM[_listIndex]);
-                    Debug.WriteLine(pedsList[0].ToString());
-                    AdminControl.executeAdminCommand("Spawnped",pedsList,"MethodsSpawners");
-                }
-                else if (_itemIndex == 1)
-                {
-                    List<object> horsesList = new List<object>();
-                    horsesList.Add(Dictionary.horses[_listIndex]);
-                    Debug.WriteLine(horsesList[0].ToString());
-                    AdminControl.executeAdminCommand("Spawnped", horsesList, "MethodsSpawners");
-                }
-                else if (_itemIndex == 2)
-                {
-                    List<object> animalsList = new List<object>();
-                    animalsList.Add(Dictionary.animals[_listIndex]);
-                    Debug.WriteLine(animalsList[0].ToString());
-                    AdminControl.executeAdminCommand("Spawnped", animalsList, "MethodsSpawners");
-                }
-                else if (_itemIndex == 3)
-                {
-                    List<object> vehiclesList = new List<object>();
-                    vehiclesList.Add(Dictionary.vehicles[_listIndex]);
-                    Debug.WriteLine(vehiclesList[0].ToString());
-                    AdminControl.executeAdminCommand("Spawnveh", vehiclesList, "MethodsSpawners");
-                }
-                else if (_itemIndex == 4)
-                {
-                    List<object> objectsList = new List<object>();
-                    objectsList.Add(Dictionary.objects[_listIndex]);
-                    Debug.WriteLine(objectsList[0].ToString());
-                    AdminControl.executeAdminCommand("Spawnobj", objectsList, "MethodsSpawners");
-                }
-                else if (_itemIndex == 5)
+                if (_itemIndex == 0)
                 {
                     List<object> weaponList = new List<object>();
                     weaponList.Add(Dictionary.weapons[_listIndex]);
@@ -375,7 +353,7 @@ namespace AdminUtilsClient
                         }
                     }
                 }
-                else if (_itemIndex == 7)
+                else if (_itemIndex == 2)
                 {
                     List<object> ammoList = new List<object>();
                     ammoList.Add(Dictionary.ammoType[_listIndex]);
@@ -385,29 +363,90 @@ namespace AdminUtilsClient
                 }
             };
 
-            spawners.OnItemSelect += async (_menu, _item, _index) =>
+            weapons.OnItemSelect += async (_menu, _item, _index) =>
             {
-                if (_index == 6)
+                if (_index == 1)
                 {
                     args = await Utils.GetOneByNUI(args, "Weapon name", "weapon name");
                     Debug.WriteLine(args[0].ToString());
 
                     string weap = Dictionary.weapons.FirstOrDefault(c => c.Contains(args[0].ToString()));
-                    if(weap != null)
+                    if (weap != null)
                     {
                         args.Clear();
-                                Debug.WriteLine(weap);
-                                args.Add(weap);
-                                args.Add(200);
-                                AdminControl.executeAdminCommand("Weap", args, "MethodsSpawners");
+                        Debug.WriteLine(weap);
+                        args.Add(weap);
+                        args.Add(200);
+                        AdminControl.executeAdminCommand("Weap", args, "MethodsSpawners");
                     }
                     args.Clear();
                 }
-                else if (_index == 8)
+                else if (_index == 3)
                 {
                     Debug.WriteLine("ammo");
                     AdminControl.executeAdminCommand("Ammo", args, "MethodsSpawners");
                 }
+
+            };
+
+
+
+                //SPAWNER MENU CALLS
+
+            spawners.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            {
+                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
+                
+                if (_itemIndex == 0)
+                {
+                    List<object> horsesList = new List<object>();
+                    horsesList.Add(Dictionary.horses[_listIndex]);
+                    Debug.WriteLine(horsesList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnped", horsesList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 1)
+                {
+                    List<object> animalsList = new List<object>();
+                    animalsList.Add(Dictionary.animals[_listIndex]);
+                    Debug.WriteLine(animalsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnped", animalsList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 2)
+                {
+                    List<object> vehiclesList = new List<object>();
+                    vehiclesList.Add(Dictionary.vehicles[_listIndex]);
+                    Debug.WriteLine(vehiclesList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnveh", vehiclesList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 3)
+                {
+                    List<object> objectsList = new List<object>();
+                    objectsList.Add(Dictionary.objects[_listIndex]);
+                    Debug.WriteLine(objectsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnobj", objectsList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 4)
+                {
+                    List<object> pedsList = new List<object>();
+                    pedsList.Add(Dictionary.pedsM[_listIndex]);
+                    Debug.WriteLine(pedsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 5)
+                {
+                    List<object> pedsList = new List<object>();
+                    pedsList.Add(Dictionary.pedsF[_listIndex]);
+                    Debug.WriteLine(pedsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
+                }
+                else if (_itemIndex == 6)
+                {
+                    List<object> pedsList = new List<object>();
+                    pedsList.Add(Dictionary.pedsT[_listIndex]);
+                    Debug.WriteLine(pedsList[0].ToString());
+                    AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
+                }
+
             };
 
             //BOOSTERS MENU CALLS

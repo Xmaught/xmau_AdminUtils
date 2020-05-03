@@ -73,6 +73,8 @@
     <Compile Include="TestingBench\Commands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usefull\Utils.cs" />
+    <Compile Include="Weapons\CommandsWeapons.cs" />
+    <Compile Include="Weapons\MethodsWeapons.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
