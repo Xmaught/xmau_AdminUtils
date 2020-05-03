@@ -22,6 +22,8 @@ namespace AdminUtilsClient.Peds
             int HashModel = API.GetHashKey(model);
             await Utils.LoadModel(HashModel);
             API.SetPlayerModel(API.PlayerId(), HashModel, 1);
+            
+            API.SetModelAsNoLongerNeeded((uint)HashModel);
         }
     }
 }

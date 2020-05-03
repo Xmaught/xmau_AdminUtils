@@ -13,6 +13,7 @@ namespace AdminUtilsClient.Boosters
         static float heading;
         public static bool godmodeON = false;
         public static bool noclip = false;
+        public static bool noclip2 = false;
         float speed = 1.28F;
 
         public static bool thorON = false;
@@ -24,6 +25,7 @@ namespace AdminUtilsClient.Boosters
             EventHandlers["vorp:thordone"] += new Action<Vector3>(ThorDone);
 
             Tick += Noc;
+            Tick += Noc2;
             Tick += OnClick;
             Tick += OnLight;
             Tick += OnFire;
@@ -110,6 +112,7 @@ namespace AdminUtilsClient.Boosters
                 API.FreezeEntityPosition(playerPed, false);
                 //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
                 noclip = false;
+
             }
         }
 
@@ -117,33 +120,14 @@ namespace AdminUtilsClient.Boosters
         private async Task Noc()
         {
             await Delay(0);
-            int playerPed = API.PlayerPedId();
             if (noclip)
             {
+                int playerPed = API.PlayerPedId();
                 API.SetEntityHeading(playerPed, heading);
-                if (API.IsControlPressed(0, 0xF84FA74F)) //RightClick
+                if (API.IsControlPressed(0, 0x8FD015D8)) //W
                 {
-                    //double z = (double)(Math.Sin(API.GetGameplayCamRot(0).X)) / (Math.Sin(90.0D - API.GetGameplayCamRot(0).X)) * speed;
-                    Vector3 a = API.GetGameplayCamRot(0);
-                    Debug.WriteLine("eso:" + (a.X - 1.0F).ToString());
-                    //Debug.WriteLine("X cam: " + API.GetGameplayCamRot(0).X.ToString());
-
-                    Vector3 c = new Vector3();
-                    if (a.X > 8.0F)
-                    {
-                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -0.5F);
-                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
-                    }
-                    else if (a.X < -8.0F)
-                    {
-                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.5F);
-                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
-                    }
-                    else
-                    {
-                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.0F);
-                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
-                    }
+                    Vector3 c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.0F);
+                    API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                 }
 
                 if (API.IsControlPressed(0, 0xD27782E3)) //S
@@ -164,7 +148,7 @@ namespace AdminUtilsClient.Boosters
                     API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                 }
 
-                if (API.IsControlPressed(0, 0xD9D0E1C0)) //CONTROL
+                if (API.IsControlPressed(0, 0xD9D0E1C0)) //SPACE
                 {
                     Vector3 c = new Vector3();
                     if (speed > 1.0F)
@@ -202,62 +186,157 @@ namespace AdminUtilsClient.Boosters
                 {
                     speed = 1.28F;
                 }
-                if (API.IsControlPressed(0, 0x07CE1E61)) //LeftClick
-                {
-                    List<object> args = new List<object>();
-                    Noclip(args);
-                }
-
                 //if (API.IsControlPressed(0, 0xDE794E3E)) //Q
                 //{
-                //    heading = heading + 3.0F;
+                //    heading = heading + 2.0F;
                 //}
                 //if (API.IsControlPressed(0, 0xCEFD9220)) //E
                 //{
-                //    heading = heading - 3.0F;
+                //    heading = heading - 2.0F;
                 //}
                 heading += API.GetGameplayCamRelativeHeading();
-                               
             }
         }
 
-        public async void GhostRider(List<object> args)
+        public void Noclip2(List<object> args)
         {
-            if (ghostRiderON)
-            {
-                API.RemoveParticleFxFromEntity(entity);
-                API.RemoveParticleFxFromEntity(pedCreated);
-                //API.StartEntityFire(entity, 0, 0, 1000);
 
-                ghostRiderON = false;
+
+            int playerPed = API.PlayerPedId();
+            heading = API.GetEntityHeading(playerPed);
+
+            if (!noclip2)
+            {
+                API.FreezeEntityPosition(playerPed, true);
+                //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
+                noclip2 = true;
             }
             else
             {
-                if (API.GetEntityAttachedTo(entity) == 0)
-                {
-                    int HashPed = API.GetHashKey("A_C_Horse_Arabian_Black");
-                    Vector3 coords = API.GetEntityCoords(API.PlayerPedId(), true, true);
-                    await Utils.LoadModel(HashPed);
-                    pedCreated = API.CreatePed((uint)HashPed, coords.X + 1, coords.Y, coords.Z, 0, true, true, true, true);
-
-
-                    //Spawn
-                    Function.Call((Hash)0x283978A15512B2FE, pedCreated, true);
-                    //SetPedIntoVehicle
-                    Function.Call((Hash)0x028F76B6E78246EB, API.PlayerPedId(), pedCreated, -1, false);
-                   
-
-                    API.SetEntityInvincible(pedCreated, true);
-                }
-                else
-                {
-                    API.SetEntityInvincible(API.GetEntityAttachedTo(entity), true);
-                }
-                ghostRiderON = true;
-
-
+                API.FreezeEntityPosition(playerPed, false);
+                //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
+                noclip2 = false;
             }
         }
+
+        [Tick]
+        private async Task Noc2()
+        {
+            await Delay(0);
+            int playerPed = API.PlayerPedId();
+            if (noclip2)
+            {
+                API.SetEntityHeading(playerPed, heading);
+                if (API.IsControlPressed(0, 0xF84FA74F)) //RightClick
+                {
+                    //double z = (double)(Math.Sin(API.GetGameplayCamRot(0).X)) / (Math.Sin(90.0D - API.GetGameplayCamRot(0).X)) * speed;
+                    Vector3 a = API.GetGameplayCamRot(0);
+                    Debug.WriteLine("eso:" + (a.X - 1.0F).ToString());
+                    //Debug.WriteLine("X cam: " + API.GetGameplayCamRot(0).X.ToString());
+
+                    Vector3 c = new Vector3();
+                    if (a.X > 8.0F)
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -0.5F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
+                    else if (a.X < -8.0F)
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.5F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
+                    else
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, speed, -1.0F);
+                        API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                    }
+                }
+
+                if (API.IsControlPressed(0, 0xD9D0E1C0)) //SPACE
+                {
+                    Vector3 c = new Vector3();
+                    if (speed > 1.0F)
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, 0.0F, -speed * 2);
+                    }
+                    else
+                    {
+                        c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, 0.0F, -speed - 1.0F);
+                    }
+                    API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                }
+
+                if (API.IsControlPressed(0, 0x8FFC75D6)) //SHIFT
+                {
+                    Vector3 c = API.GetOffsetFromEntityInWorldCoords(playerPed, 0.0F, 0.0F, speed - 1.0F);
+                    API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
+                }
+
+                if (API.IsControlPressed(0, 0x8FD015D8)) //W-more speed
+                {
+                    if (speed > 0.5F)
+                    {
+                        speed = speed + 0.5F;
+                    }
+                }
+                if (API.IsControlPressed(0, 0xD27782E3)) //S-less speed
+                {
+                    if (speed > 0.5)
+                    {
+                        speed = speed - 0.5F;
+                    }
+                }
+                if (API.IsControlPressed(0, 0x8CC9CD42)) //X-default speed
+                {
+                    speed = 1.28F;
+                }
+                if (API.IsControlPressed(0, 0x07CE1E61)) //LeftClick
+                {
+                    List<object> args = new List<object>();
+                    Noclip2(args);
+                }
+                heading += API.GetGameplayCamRelativeHeading();
+            }
+        }
+
+                public async void GhostRider(List<object> args)
+                {
+                    if (ghostRiderON)
+                    {
+                        API.RemoveParticleFxFromEntity(entity);
+                        API.RemoveParticleFxFromEntity(pedCreated);
+                        //API.StartEntityFire(entity, 0, 0, 1000);
+
+                        ghostRiderON = false;
+                    }
+                    else
+                    {
+                        if (API.GetEntityAttachedTo(entity) == 0)
+                        {
+                            int HashPed = API.GetHashKey("A_C_Horse_Arabian_Black");
+                            Vector3 coords = API.GetEntityCoords(API.PlayerPedId(), true, true);
+                            await Utils.LoadModel(HashPed);
+                            pedCreated = API.CreatePed((uint)HashPed, coords.X + 1, coords.Y, coords.Z, 0, true, true, true, true);
+
+
+                            //Spawn
+                            Function.Call((Hash)0x283978A15512B2FE, pedCreated, true);
+                            //SetPedIntoVehicle
+                            Function.Call((Hash)0x028F76B6E78246EB, API.PlayerPedId(), pedCreated, -1, false);
+
+
+                            API.SetEntityInvincible(pedCreated, true);
+                        }
+                        else
+                        {
+                            API.SetEntityInvincible(API.GetEntityAttachedTo(entity), true);
+                        }
+                        ghostRiderON = true;
+
+
+                    }
+                }
+            
 
         public async Task OnFire()
         {

@@ -63,5 +63,12 @@ namespace AdminUtilsClient
         //    Debug.WriteLine(API.GetHashKey(weatherType2.ToString()).ToString());
         //    Debug.WriteLine(percentWeather2.ToString());
         //}
+
+
+        
+
+            
+        
+
     }
 }

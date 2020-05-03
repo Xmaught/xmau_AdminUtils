@@ -49,7 +49,7 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(spawnersButton);
                     MenuController.BindMenuItem(menu, spawners, spawnersButton);
 
-                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.pedsTest, 0, "Ped spawner. Command:/spawnped pedmodel");
+                        MenuListItem pedListItem = new MenuListItem("Peds", Dictionary.pedsM, 0, "Ped spawner. Command:/spawnped pedmodel");
                         spawners.AddMenuItem(pedListItem);
 
                         MenuListItem horsesListItem = new MenuListItem("Horses", Dictionary.horses, 0, "Horses spawner. Command:/spawnped pedmodel");
@@ -216,8 +216,14 @@ namespace AdminUtilsClient
                     menu.AddMenuItem(pedButton);
                     MenuController.BindMenuItem(menu, peds, pedButton);
 
-                        MenuListItem pedHumanListItem = new MenuListItem("Human", Dictionary.pedsTest, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
-                        peds.AddMenuItem(pedHumanListItem);
+                        MenuListItem pedMaleListItem = new MenuListItem("Male", Dictionary.pedsM, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
+                        peds.AddMenuItem(pedMaleListItem);
+
+                        MenuListItem pedFemaleListItem = new MenuListItem("Female", Dictionary.pedsF, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
+                        peds.AddMenuItem(pedFemaleListItem);
+
+                        MenuListItem pedKidListItem = new MenuListItem("Teens/kids", Dictionary.pedsT, 0, "Press here to change your ped to another human or: Command:/changeped pedmodel");
+                        peds.AddMenuItem(pedKidListItem);
 
                         MenuListItem pedAnimalListItem = new MenuListItem("Animal", Dictionary.animals, 0, "Press here to change your ped to an animal or: Command:/changeped pedmodel");
                         peds.AddMenuItem(pedAnimalListItem);
@@ -319,7 +325,7 @@ namespace AdminUtilsClient
                 if(_itemIndex == 0)
                 {
                     List<object> pedsList = new List<object>();
-                    pedsList.Add(Dictionary.pedsTest[_listIndex]);
+                    pedsList.Add(Dictionary.pedsM[_listIndex]);
                     Debug.WriteLine(pedsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped",pedsList,"MethodsSpawners");
                 }
@@ -546,11 +552,25 @@ namespace AdminUtilsClient
                 if (_itemIndex == 0)
                 {
                     List<object> pedList = new List<object>();
-                    pedList.Add(Dictionary.pedsTest[_listIndex]);
+                    pedList.Add(Dictionary.pedsM[_listIndex]);
                     Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
                 }
-                else if (_itemIndex == 1)
+                if (_itemIndex == 1)
+                {
+                    List<object> pedList = new List<object>();
+                    pedList.Add(Dictionary.pedsF[_listIndex]);
+                    Debug.WriteLine(pedList[0].ToString());
+                    AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
+                }
+                if (_itemIndex == 2)
+                {
+                    List<object> pedList = new List<object>();
+                    pedList.Add(Dictionary.pedsT[_listIndex]);
+                    Debug.WriteLine(pedList[0].ToString());
+                    AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
+                }
+                else if (_itemIndex == 3)
                 {
                     List<object> animalList = new List<object>();
                     animalList.Add(Dictionary.animals[_listIndex]);

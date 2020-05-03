@@ -6,13 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace AdminUtilsClient
 {
     public class Utils : BaseScript
     {
+
         public static int blip = -1;
 
+        public Utils()
+        {
+            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+        }
         public static async Task TeleportAndFoundGroundAsync(Vector3 tpCoords)
         {
             float groundZ = 0.0F;
@@ -70,7 +76,15 @@ namespace AdminUtilsClient
             Function.Call((Hash)0x9CB1A1623062F402, blip, "LastPosition");
         }
 
-        public static Vector3 GetCoordsFromCam(float distance)
+        private void OnResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            Debug.WriteLine($"{resourceName} cleared BackBlip.");
+                API.RemoveBlip(ref blip);
+        }
+
+            public static Vector3 GetCoordsFromCam(float distance)
         {
             Vector3 rot = API.GetGameplayCamRot(2);
             Vector3 coord = API.GetGameplayCamCoord();

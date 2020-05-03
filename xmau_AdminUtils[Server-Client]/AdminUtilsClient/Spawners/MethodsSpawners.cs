@@ -19,6 +19,7 @@ namespace AdminUtilsClient.Spawners
             await Utils.LoadModel(HashObjeto);
             int cosa = API.CreateObject((uint)HashObjeto, coords.X + 0.5f, coords.Y + 0.5f, coords.Z + 1.0f, true, true, false, true, true);
             API.PlaceObjectOnGroundProperly(cosa, 1);
+            API.SetModelAsNoLongerNeeded((uint)HashObjeto);
         }
 
 
@@ -33,6 +34,7 @@ namespace AdminUtilsClient.Spawners
             Function.Call((Hash)0x283978A15512B2FE, pedCreated, true);
             //SetPedIntoVehicle
             Function.Call((Hash)0x028F76B6E78246EB, API.PlayerPedId(), pedCreated, -1, false);
+            API.SetModelAsNoLongerNeeded((uint)HashPed);
         }
 
 
@@ -49,6 +51,7 @@ namespace AdminUtilsClient.Spawners
             Function.Call((Hash)0xBB9CE077274F6A1B,vehCreated, 10, 10);
             //SetPedIntoVehicle
             Function.Call((Hash)0xF75B0D629E1C063D, API.PlayerPedId(), vehCreated, -1, false);
+            API.SetModelAsNoLongerNeeded((uint)HashVeh);
         }
 
         public void Weap(List<object> args)
@@ -59,6 +62,7 @@ namespace AdminUtilsClient.Spawners
 
             API.GiveDelayedWeaponToPed(playerPed, (uint)HashModel, ammoQuantity, true, 2);
             API.SetPedAmmo(playerPed, (uint)HashModel, ammoQuantity);
+
         }
 
         public void Weapon(List<object> args)
