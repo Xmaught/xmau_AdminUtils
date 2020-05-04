@@ -43,11 +43,6 @@ namespace AdminUtilsClient.Teleports
             await Utils.TeleportAndFoundGroundAsync(waypointCoords);
         }
 
-        /// <summary>
-        /// Method that teleport player to coords in ground
-        /// </summary>
-        /// <param name="args"> string x, string y </param>
-
         public async void TpToCoords(List<object> args)
         {
             try
@@ -70,10 +65,6 @@ namespace AdminUtilsClient.Teleports
             }
         }
 
-        /// <summary>
-        /// Method that send player coords through server to bring player to own coords
-        /// </summary>
-        /// <param name="args">None</param>
         public void TpBring(List<object> args)
         {
             int destinataryID = int.Parse(args[0].ToString());
@@ -82,21 +73,11 @@ namespace AdminUtilsClient.Teleports
             TriggerServerEvent("vorp:ownerCoordsToBring", ownCoords, destinataryID);
         }
 
-        /// <summary>
-        /// Method that receive coords from the server to make an teleport requested by admin
-        /// </summary>
-        /// <param name="bringCoords"></param>
         public void Bring(Vector3 bringCoords)
         {
-            Debug.WriteLine(bringCoords.X.ToString());
             Utils.TeleportToCoords(bringCoords.X, bringCoords.Y, bringCoords.Z);
         }
 
-
-        /// <summary>
-        /// Method that request coords from the player destiny
-        /// </summary>
-        /// <param name="args"></param>
         public void TpToPlayer(List<object> args)
         {
             if (Utils.blip == -1)
@@ -104,15 +85,10 @@ namespace AdminUtilsClient.Teleports
                 lastTpCoords = API.GetEntityCoords(API.PlayerPedId(), true, true);
                 Utils.CreateBlip();
             }
-            Debug.WriteLine("1");
             int destinataryID = int.Parse(args[0].ToString());
             TriggerServerEvent("vorp:askCoordsToTPPlayerDestiny", destinataryID);
         }
 
-        /// <summary>
-        /// Method that response to the petition of coords made by TpToPlayer through server
-        /// </summary>
-        /// <param name="sourceID"></param>
         private void ResponseCoords(string sourceID)
         {
             Vector3 responseCoords = API.GetEntityCoords(API.PlayerPedId(), true, true);
@@ -120,11 +96,7 @@ namespace AdminUtilsClient.Teleports
         }
 
 
-        /// <summary>
-        /// Method that teleport the source to player destinatary
-        /// </summary>
-        /// <param name="coordsToTp"></param>
-        private async void TpToPlayerDone(Vector3 coordsToTp)
+        private void TpToPlayerDone(Vector3 coordsToTp)
         {
             Utils.TeleportToCoords(coordsToTp.X,coordsToTp.Y,coordsToTp.Z);
         }
@@ -204,7 +176,6 @@ namespace AdminUtilsClient.Teleports
             API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
             if (tpView)
             {
-                //API.DrawLightWithRange(endCoord.X, endCoord.Y, endCoord.Z, 255, 255, 255, 2.0F, 200000000.0F);
                 Function.Call((Hash)0x2A32FAA57B937173, -1795314153, endCoord.X, endCoord.Y, endCoord.Z, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 50.0F, 0, 255, 0, 155, false, false, 2, false, 0, 0, false);
             }
         }
@@ -222,8 +193,6 @@ namespace AdminUtilsClient.Teleports
                 Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
                 tpView = true;
             }
-            //API.GetShapeTestResult();
-            //API.StartEntityFire
         }
 
 

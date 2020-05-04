@@ -18,11 +18,9 @@ namespace AdminUtilsClient.Peds
         public async void ChangeModel(List<object> args)
         {
             string model = args[0].ToString();
-            Debug.WriteLine(model);
             int HashModel = API.GetHashKey(model);
             await Utils.LoadModel(HashModel);
             API.SetPlayerModel(API.PlayerId(), HashModel, 1);
-            
             API.SetModelAsNoLongerNeeded((uint)HashModel);
         }
     }

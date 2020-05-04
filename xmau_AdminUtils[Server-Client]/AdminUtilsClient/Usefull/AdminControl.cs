@@ -1,6 +1,5 @@
 ﻿using AdminUtilsClient.Boosters;
 using AdminUtilsClient.Deletes;
-using AdminUtilsClient.Help;
 using AdminUtilsClient.Notifications;
 using AdminUtilsClient.Peds;
 using AdminUtilsClient.PlayerAdministration;
@@ -33,7 +32,6 @@ namespace AdminUtilsClient
         }
 
         static Type type;
-        static MethodsHelp methHelp;
         static MethodsSpawners methSpawners;
         static MethodsTeleports methTeleports;
         static MethodsBoosters methBoosters;
@@ -51,14 +49,8 @@ namespace AdminUtilsClient
             {
                 return;
             }*/
-            if(cl == "MethodsHelp")
-            {
-                type = typeof(MethodsHelp);
-                MethodInfo mi = type.GetMethod(command);
-                methHelp = new MethodsHelp();
-                mi.Invoke(methHelp, new Object[] { args });
-            }
-            else if (cl == "MethodsWeapons")
+            
+            if (cl == "MethodsWeapons")
             {
                 type = typeof(MethodsWeapons);
                 MethodInfo mi = type.GetMethod(command);

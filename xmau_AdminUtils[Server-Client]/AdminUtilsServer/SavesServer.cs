@@ -49,12 +49,10 @@ namespace AdminUtilsServer
             if (savedBans.Any(c=> c.StartsWith(steamIdentifier)))
             {
                 deferrals.done("You are banned from this server. Reason: " + savedBans.FirstOrDefault(c => c.Contains(steamIdentifier)).Split(',')[1]);
-                Debug.WriteLine("banned");
             } 
             else
             {
                 deferrals.done();
-                Debug.WriteLine("not banned");
             }
 
         }

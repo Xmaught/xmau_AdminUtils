@@ -182,7 +182,6 @@ namespace AdminUtilsClient
                                     foreach (string s in MethodsTeleports.savedpos)
                                     {
                                         string[] sPos = s.Split(',');
-                                        Debug.WriteLine(s);
 
                                         positions.AddMenuItem(new MenuItem(sPos[0], "Press here to teleport to this saved coords")
                                         {
@@ -242,6 +241,10 @@ namespace AdminUtilsClient
                         {
                             Style = MenuCheckboxItem.CheckboxStyle.Tick
                         });
+                        boosters.AddMenuItem(new MenuCheckboxItem("NoclipV2", "Press here to be weightless or: Command:/n. Mouse control,W,S,C", MethodsBoosters.noclip)
+                        {
+                            Style = MenuCheckboxItem.CheckboxStyle.Tick
+                        });
             Menu peds = new Menu("Peds", "");
                 MenuController.AddSubmenu(menu, peds);
 
@@ -284,6 +287,93 @@ namespace AdminUtilsClient
                         };
                         administration.AddMenuItem(playerListButton);
                         MenuController.BindMenuItem(administration, playersList, playerListButton);
+
+                        
+                        foreach (var i in API.GetActivePlayers())
+                        {
+                            string name = API.GetPlayerName(i).ToString();
+                            Menu player = new Menu(name, $"{name} Actions");
+                            MenuController.AddSubmenu(playersList, player);
+
+                            MenuItem playerNameButton = new MenuItem(name, $"{name} Actions")
+                            {
+                                RightIcon = MenuItem.Icon.ARROW_RIGHT
+                            };
+                            playersList.AddMenuItem(playerNameButton);
+                            MenuController.BindMenuItem(playersList, player, playerNameButton);
+
+                            player.AddMenuItem(new MenuItem("Freeze", "Press here to freeze player or: Command:/stop id.")
+                            {
+                                Enabled = true,
+                            });
+                            
+                            player.AddMenuItem(new MenuItem("Slap", "Slap a player or: Command:/slap id.")
+                            {
+                                Enabled = true,
+                            });
+                            player.AddMenuItem(new MenuItem("Lighting", "Press here to lightning a player or: Command:/thorp id.")
+                            {
+                                Enabled = true,
+                            });
+                            player.AddMenuItem(new MenuItem("Fire", "Press here to burn a player till die or: Command:/firep id.")
+                            {
+                                Enabled = true,
+                            });
+                            player.AddMenuItem(new MenuItem("Kick player", "Press here to kick a player form server or: Command:/k id.")
+                            {
+                                Enabled = true,
+                            });
+                            player.AddMenuItem(new MenuItem("Ban", "Press here to ban a player: Command:/firep id.")
+                            {
+                                Enabled = true,
+                            });
+
+                            player.OnItemSelect += (_menu, _item, _index) =>
+                            {
+                                foreach(var a in API.GetActivePlayers())
+                                {
+                                    if(API.GetPlayerName(a) == _menu.MenuTitle)
+                                    {
+                                        if (_index == 0)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("StopPlayer", args, "MethodsPlayerAdministration");
+                                            args.Clear();
+                                        }
+                                        else if (_index == 1)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("Slap", args, "MethodsPlayerAdministration");
+                                            args.Clear();
+                                        }
+                                        else if (_index == 2)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("ThorToId", args, "MethodsBoosters");
+                                            args.Clear();
+                                        }
+                                        else if (_index == 3)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("FireToId", args, "MethodsBoosters");
+                                            args.Clear();
+                                        }
+                                        else if (_index == 4)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("Kick", args, "MethodsPlayerAdministration");
+                                            args.Clear();
+                                        }
+                                        else if (_index == 5)
+                                        {
+                                            args.Add(API.GetPlayerServerId(a));
+                                            AdminControl.executeAdminCommand("Sbans", args, "MethodsPlayerAdministration");
+                                            args.Clear();
+                                        }
+                                    }
+                                }
+                            };
+                        }
 
                         administration.AddMenuItem(new MenuItem("Kick player", "Press here to kick a player form server or: Command:/k id.")
                         {
@@ -330,8 +420,6 @@ namespace AdminUtilsClient
                             foreach (string s in MethodsPlayerAdministration.savedbans)
                             {
                                 string[] sBan = s.Split(',');
-                                Debug.WriteLine(s);
-
                                 bansList.AddMenuItem(new MenuItem(sBan[0], sBan[1])
                                 {
                                     Enabled = true,
@@ -365,7 +453,6 @@ namespace AdminUtilsClient
                 {
                     List<object> weaponList = new List<object>();
                     weaponList.Add(Dictionary.weapons[_listIndex]);
-                    Debug.WriteLine(weaponList[0].ToString());
                     weaponList.Add(200);
                     AdminControl.executeAdminCommand("Weap", weaponList, "MethodsWeapons");
                     foreach (string am in Dictionary.ammoType)
@@ -383,7 +470,6 @@ namespace AdminUtilsClient
                 {
                     List<object> ammoList = new List<object>();
                     ammoList.Add(Dictionary.ammoType[_listIndex]);
-                    Debug.WriteLine(ammoList[0].ToString());
                     ammoList.Add(200);
                     AdminControl.executeAdminCommand("WeapAmmo", ammoList, "MethodsWeapons");
                 }
@@ -394,13 +480,11 @@ namespace AdminUtilsClient
                 if (_index == 1)
                 {
                     args = await Utils.GetOneByNUI(args, "Weapon name", "weapon name");
-                    Debug.WriteLine(args[0].ToString());
 
                     string weap = Dictionary.weapons.FirstOrDefault(c => c.Contains(args[0].ToString()));
                     if (weap != null)
                     {
                         args.Clear();
-                        Debug.WriteLine(weap);
                         args.Add(weap);
                         args.Add(200);
                         AdminControl.executeAdminCommand("Weap", args, "MethodsWeapons");
@@ -409,7 +493,6 @@ namespace AdminUtilsClient
                 }
                 else if (_index == 3)
                 {
-                    Debug.WriteLine("ammo");
                     AdminControl.executeAdminCommand("Ammo", args, "MethodsWeapons");
                 }
 
@@ -421,55 +504,47 @@ namespace AdminUtilsClient
 
             spawners.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
-                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
                 
                 if (_itemIndex == 0)
                 {
                     List<object> horsesList = new List<object>();
                     horsesList.Add(Dictionary.horses[_listIndex]);
-                    Debug.WriteLine(horsesList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped", horsesList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 1)
                 {
                     List<object> animalsList = new List<object>();
                     animalsList.Add(Dictionary.animals[_listIndex]);
-                    Debug.WriteLine(animalsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped", animalsList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 2)
                 {
                     List<object> vehiclesList = new List<object>();
                     vehiclesList.Add(Dictionary.vehicles[_listIndex]);
-                    Debug.WriteLine(vehiclesList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnveh", vehiclesList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 3)
                 {
                     List<object> objectsList = new List<object>();
                     objectsList.Add(Dictionary.objects[_listIndex]);
-                    Debug.WriteLine(objectsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnobj", objectsList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 4)
                 {
                     List<object> pedsList = new List<object>();
                     pedsList.Add(Dictionary.pedsM[_listIndex]);
-                    Debug.WriteLine(pedsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 5)
                 {
                     List<object> pedsList = new List<object>();
                     pedsList.Add(Dictionary.pedsF[_listIndex]);
-                    Debug.WriteLine(pedsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
                 }
                 else if (_itemIndex == 6)
                 {
                     List<object> pedsList = new List<object>();
                     pedsList.Add(Dictionary.pedsT[_listIndex]);
-                    Debug.WriteLine(pedsList[0].ToString());
                     AdminControl.executeAdminCommand("Spawnped", pedsList, "MethodsSpawners");
                 }
 
@@ -521,6 +596,10 @@ namespace AdminUtilsClient
                 else if (_index == 4)
                 {
                     AdminControl.executeAdminCommand("Noclip", args, "MethodsBoosters");
+                }
+                else if (_index == 5)
+                {
+                    AdminControl.executeAdminCommand("Noclip2", args, "MethodsBoosters");
                 }
             };
 
@@ -615,7 +694,6 @@ namespace AdminUtilsClient
 
             places.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
-                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
                 if (_itemIndex == 0)
                 {
                     var pla = Dictionary.places.ToArray();
@@ -632,36 +710,33 @@ namespace AdminUtilsClient
 
             peds.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
-                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
                 if (_itemIndex == 0)
                 {
                     List<object> pedList = new List<object>();
                     pedList.Add(Dictionary.pedsM[_listIndex]);
-                    Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
                 }
                 if (_itemIndex == 1)
                 {
                     List<object> pedList = new List<object>();
                     pedList.Add(Dictionary.pedsF[_listIndex]);
-                    Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
                 }
                 if (_itemIndex == 2)
                 {
                     List<object> pedList = new List<object>();
                     pedList.Add(Dictionary.pedsT[_listIndex]);
-                    Debug.WriteLine(pedList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", pedList, "MethodsPeds");
                 }
                 else if (_itemIndex == 3)
                 {
                     List<object> animalList = new List<object>();
                     animalList.Add(Dictionary.animals[_listIndex]);
-                    Debug.WriteLine(animalList[0].ToString());
                     AdminControl.executeAdminCommand("ChangeModel", animalList, "MethodsPeds");
                 }
             };
+
+           
 
             administration.OnItemSelect += async (_menu, _item, _index) =>
             {
@@ -674,7 +749,7 @@ namespace AdminUtilsClient
                 else if (_index == 2)
                 {
                     args = await Utils.GetOneByNUI(args, "Id player", "Id player");
-                    AdminControl.executeAdminCommand("Stop", args, "MethodsPlayerAdministration");
+                    AdminControl.executeAdminCommand("StopPlayer", args, "MethodsPlayerAdministration");
                     args.Clear();
                 }
                 else if (_index == 3)
@@ -696,6 +771,8 @@ namespace AdminUtilsClient
                     args.Clear();
                 }
             };
+
+
 
             bansList.OnCheckboxChange += (_menu, _item, _index, _checked) =>
             {

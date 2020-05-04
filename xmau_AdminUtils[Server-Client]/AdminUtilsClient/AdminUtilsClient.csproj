@@ -54,8 +54,6 @@
     <Compile Include="Boosters\MethodsBoosters.cs" />
     <Compile Include="Deletes\CommandsDeletes.cs" />
     <Compile Include="Deletes\MethodsDeletes.cs" />
-    <Compile Include="Help\CommandsHelp.cs" />
-    <Compile Include="Help\MethodsHelp.cs" />
     <Compile Include="Notifications\CommandsNotifications.cs" />
     <Compile Include="Notifications\MethodsNotifications.cs" />
     <Compile Include="Peds\CommandsPeds.cs" />

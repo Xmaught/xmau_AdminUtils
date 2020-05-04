@@ -214,13 +214,13 @@ namespace AdminUtilsClient.Boosters
             if (!noclip2)
             {
                 API.FreezeEntityPosition(playerPed, true);
-                //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), true);
                 noclip2 = true;
             }
             else
             {
                 API.FreezeEntityPosition(playerPed, false);
-                //Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
+                Function.Call(Hash.SET_PLAYER_INVINCIBLE, API.PlayerId(), false);
                 noclip2 = false;
             }
         }
@@ -233,12 +233,9 @@ namespace AdminUtilsClient.Boosters
             if (noclip2)
             {
                 API.SetEntityHeading(playerPed, heading);
-                if (API.IsControlPressed(0, 0xF84FA74F)) //RightClick
+                if (API.IsControlPressed(0, 0x8FD015D8)) //W
                 {
-                    //double z = (double)(Math.Sin(API.GetGameplayCamRot(0).X)) / (Math.Sin(90.0D - API.GetGameplayCamRot(0).X)) * speed;
                     Vector3 a = API.GetGameplayCamRot(0);
-                    Debug.WriteLine("eso:" + (a.X - 1.0F).ToString());
-                    //Debug.WriteLine("X cam: " + API.GetGameplayCamRot(0).X.ToString());
 
                     Vector3 c = new Vector3();
                     if (a.X > 8.0F)
@@ -278,14 +275,14 @@ namespace AdminUtilsClient.Boosters
                     API.SetEntityCoords(playerPed, c.X, c.Y, c.Z, true, true, true, true);
                 }
 
-                if (API.IsControlPressed(0, 0x8FD015D8)) //W-more speed
+                if (API.IsControlPressed(0, 0xCEFD9220)) //E-more speed
                 {
                     if (speed > 0.5F)
                     {
                         speed = speed + 0.5F;
                     }
                 }
-                if (API.IsControlPressed(0, 0xD27782E3)) //S-less speed
+                if (API.IsControlPressed(0, 0xDE794E3E)) //Q-less speed
                 {
                     if (speed > 0.5)
                     {
@@ -296,7 +293,7 @@ namespace AdminUtilsClient.Boosters
                 {
                     speed = 1.28F;
                 }
-                if (API.IsControlPressed(0, 0x07CE1E61)) //LeftClick
+                if (API.IsControlPressed(0, 0x07CE1E61)) //F-turn off noclip2
                 {
                     List<object> args = new List<object>();
                     Noclip2(args);
@@ -412,7 +409,6 @@ namespace AdminUtilsClient.Boosters
 
         private void ThorDone(Vector3 endCooord)
         {
-            Debug.WriteLine("vuelve cliente");
             API.ForceLightningFlashAtCoords(endCooord.X, endCooord.Y, endCooord.Z);
         }
 

@@ -32,11 +32,9 @@ namespace AdminUtilsClient.Deletes
                 int vehicle = API.GetClosestVehicle(pCoords.X, pCoords.Y, pCoords.Z, 20, 0, 467);
                 bool isMyEntity = API.NetworkRequestControlOfEntity(vehicle);
                 int ped = API.GetMount(vehicle);
-                Debug.WriteLine(ped.ToString());
                 API.SetEntityAsMissionEntity(vehicle, true, true);
                 API.DeleteVehicle(ref vehicle);
                 await Delay(300);
-                Debug.WriteLine(vehicle.ToString());
             }
         }
 
@@ -45,15 +43,13 @@ namespace AdminUtilsClient.Deletes
             DeleteThisHorse();
         }
 
-        public async Task DeleteThisHorse()
+        public void DeleteThisHorse()
         {
             int entity = API.PlayerPedId();
             int vehicle = API.GetEntityAttachedTo(entity);
             bool isMyEntity = API.NetworkRequestControlOfEntity(vehicle);
             API.SetEntityAsMissionEntity(vehicle,true,true);
-            Debug.WriteLine(isMyEntity.ToString());
             API.DeletePed(ref vehicle);
-            await Delay(500);
         }
 
         [Tick]
@@ -68,8 +64,6 @@ namespace AdminUtilsClient.Deletes
             Vector3 sourceCoords = Utils.GetCoordsFromCam(100000.0F);
             int rayHandle = API.StartShapeTestRay(camCoords.X, camCoords.Y, camCoords.Z, sourceCoords.X, sourceCoords.Y, sourceCoords.Z, -1, API.PlayerPedId(), 0);
             API.GetShapeTestResult(rayHandle, ref hit, ref endCoord, ref surfaceNormal, ref entity);
-
-
 
             if (API.IsControlPressed(0, 0xCEE12B50) && onDel && endCoord.X != 0.0)
             {

@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace AdminUtilsClient.Teleports
 {
-
-    /// <summary>
-    /// COMENTAR CON OSMANY LO DEL new Action<int, List<object>, string, string>((source, args, cl, raw)
-    /// </summary>
     class CommandsTeleports :BaseScript
     {
         public CommandsTeleports()

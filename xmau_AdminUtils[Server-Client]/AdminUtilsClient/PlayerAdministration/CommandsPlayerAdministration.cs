@@ -44,6 +44,10 @@ namespace AdminUtilsClient.PlayerAdministration
             {
                 AdminControl.executeAdminCommand("PlayerList", args, "MethodsPlayerAdministration");
             }), false);
+            API.RegisterCommand("cblip", new Action<int, List<object>, string, string>((source, args, cl, raw) =>
+            {
+                AdminControl.executeAdminCommand("PlayerBlips", args, "MethodsPlayerAdministration");
+            }), false);
         }
     }
 }

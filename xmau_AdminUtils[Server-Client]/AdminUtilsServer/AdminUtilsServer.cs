@@ -114,13 +114,15 @@ namespace AdminUtilsServer
         {
             PlayerList pl = new PlayerList();
             Player p = pl[id];
-            TriggerClientEvent(p,"vorp:Tip", message, 8000);
+            //TriggerClientEvent(p,"vorp:Tip", message, 8000);
+            TriggerClientEvent(p, "redem_roleplay:Tip",message, 8000);
             //Exports["redem_roleplay"].DisplayTopCenterNotification(0, message, 8000);
         }
 
         private void BroadCastMessage([FromSource]Player player, string message)
         {
-            TriggerClientEvent("vorp:NotifyLeft", player.Name, message, "generic_textures", "tick", 12000);
+            //TriggerClientEvent("vorp:NotifyLeft", player.Name, message, "generic_textures", "tick", 12000);
+            TriggerClientEvent("redem_roleplay:NotifyLeft", message, "second text", "generic_textures", "tick", 8000);
         }
 
         private void ThorToId([FromSource]Player player, int idDestinatary)

@@ -15,11 +15,14 @@ namespace AdminUtilsClient.PlayerAdministration
         public static bool deleteOn = false;
         public static List<string> savedbans = new List<string>();
         public static List<int> playerList = new List<int>();
+        static List<int> blipsList = new List<int>();
+        static bool playersFollow = false;
         //static Vector3 pCCoords;
         public MethodsPlayerAdministration()
         {
 
             Tick += freezeAnim;
+            //Tick += PlayersFollow;
 
 
             EventHandlers["vorp:slapback"] += new Action(SlapDone);
@@ -138,20 +141,50 @@ namespace AdminUtilsClient.PlayerAdministration
 
         public void PlayerList(List<object> args)
         {
-            
             List<int> playerList = new List<int>();
             foreach (var i in API.GetActivePlayers())
             {
                 playerList.Add(i);
-                
             }
-
-            foreach (var i in playerList)
+        }
+        
+        public void PlayerBlips(List<object> args)
+        {
+            if (playersFollow)
             {
-                Debug.WriteLine("Player id: "+API.GetPlayerServerId(i).ToString());
-                Debug.WriteLine("Player ped: "+API.GetPlayerPed(i).ToString());
-                Debug.WriteLine("Player name: "+API.GetPlayerName(i).ToString());
+                playersFollow = false;
+                ClearBlips();
             }
+            else
+            {
+                playersFollow = true;
+                CreateBlips();
+            }
+        }
+        //Mañana muertos con blip
+        private async Task CreateBlips()
+        {
+            foreach (var i in API.GetActivePlayers())
+            {
+                await Delay(10);
+                Vector3 coords = API.GetEntityCoords(API.GetPlayerPed(i), true, true);
+                int _blip = Function.Call<int>((Hash)0x23F74C2FDA6E7C61, 1664425300, API.GetPlayerPed(i));
+                Function.Call((Hash)0x74F74D3207ED525C, _blip, -1580514024, 1);
+                Function.Call((Hash)0xD38744167B2FA257, _blip, 0.2F);
+                Function.Call((Hash)0x9CB1A1623062F402, _blip, $"{API.GetPlayerName(i)} id: {API.GetPlayerServerId(i)}");
+                blipsList.Add(_blip);
+            }
+        }
+
+        private async Task ClearBlips()
+        {
+            foreach (int b in blipsList)
+            {
+                int actualBlip = b;
+                API.RemoveBlip(ref actualBlip);
+            }
+            blipsList.Clear();
+            await Delay(1);
         }
     }
 }

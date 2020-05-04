@@ -54,14 +54,12 @@ namespace AdminUtilsClient
                 Function.Call(Hash.REQUEST_MODEL, hash);
                 while (!Function.Call<bool>(Hash.HAS_MODEL_LOADED, hash))
                 {
-                    Debug.WriteLine($"Waiting for model {hash} load!");
                     await BaseScript.Delay(100);
                 }
                 return true;
             }
             else
             {
-                Debug.WriteLine($"Model {hash} is not valid!");
                 return false;
             }
         }
@@ -70,7 +68,6 @@ namespace AdminUtilsClient
         public static void CreateBlip()
         {
             blip = Function.Call<int>((Hash)0x554D9D53F696D002, 203020899, MethodsTeleports.lastTpCoords.X, MethodsTeleports.lastTpCoords.Y, MethodsTeleports.lastTpCoords.Z);
-            Debug.WriteLine(blip.ToString());
             Function.Call((Hash)0x74F74D3207ED525C, blip, -1546805641, 1);
             Function.Call((Hash)0xD38744167B2FA257, blip, 0.2F);
             Function.Call((Hash)0x9CB1A1623062F402, blip, "LastPosition");
@@ -80,7 +77,6 @@ namespace AdminUtilsClient
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            Debug.WriteLine($"{resourceName} cleared BackBlip.");
                 API.RemoveBlip(ref blip);
         }
 
@@ -182,8 +178,8 @@ namespace AdminUtilsClient
                 // Debug.WriteLine(VARIABLE.ToString());
                 // Debug.WriteLine(API.GetPlayerPed(VARIABLE).ToString());
                 // Debug.WriteLine(localPed.ToString());
-                Debug.WriteLine(API.GetPlayerName(VARIABLE));
-                Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
+                //Debug.WriteLine(API.GetPlayerName(VARIABLE));
+                //Debug.WriteLine(API.GetPlayerServerId(VARIABLE).ToString());
             }
 
 
